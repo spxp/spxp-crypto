@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.spxp</groupId>
+        <artifactId>spxp-crypto</artifactId>
+        <version>0.3-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>spxp-crypto-sdk-V02</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.spxp</groupId>
+            <artifactId>spxp-crypto-sdk</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-security-jose</artifactId>
+            <version>3.3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>
