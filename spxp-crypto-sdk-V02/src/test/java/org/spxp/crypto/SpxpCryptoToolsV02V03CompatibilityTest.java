@@ -33,7 +33,7 @@ public class SpxpCryptoToolsV02V03CompatibilityTest {
 		final byte[] key = SpxpCryptoToolsV03.generateSymmetricKey(256);
 		String messageIn = "The quick brown fox jumps over the lazy dog";
 		final String keyIdIn = "test";
-		String compact = SpxpCryptoToolsV03.encryptSymmetricCompact(messageIn, keyIdIn, key);
+		String compact = SpxpCryptoToolsV03.encryptSymmetricCompact(messageIn, new SpxpSymmetricKeySpec(keyIdIn, key));
 		Assert.assertNotNull(compact);
 		String messageOut = SpxpCryptoToolsV02.decryptSymmetricCompact(compact, new SpxpKeyProvider() {
 			@Override

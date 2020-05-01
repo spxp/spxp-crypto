@@ -7,7 +7,9 @@ public class SpxpSymmetricKeySpec {
 	private final byte[] symmetricKey;
 
 	public SpxpSymmetricKeySpec(String keyId, byte[] symmetricKey) {
-		super();
+		if(symmetricKey.length != 256 / 8) {
+			throw new IllegalArgumentException("Invalid key size. Expected 256bit");
+		}
 		this.keyId = keyId;
 		this.symmetricKey = symmetricKey;
 	}
