@@ -1,0 +1,6 @@
+{
+    "kid": "ABCD.1234",
+    "kty": "oct",
+    "alg": "A256GCM",
+    "k": "Dl3fyz_0lHaSeFl-TJxSTr2NET5H6t2SELmI5tiCFno"
+}

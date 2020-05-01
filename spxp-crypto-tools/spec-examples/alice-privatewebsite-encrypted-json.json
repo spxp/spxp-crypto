@@ -1,0 +1,15 @@
+{
+    "ciphertext": "Q-H663u-CoSjNCaU_4UTIjCqSFuVqShoOQPUL2cKirUvZDhT8NLHwYc6FeD6mNDwvMfXmtAgB4fwkQA_xPu8KL1FwM37-s2R-Zxp8MquC_KfrNRfPbZXrgf8Eehfg0yvJhQVj-_xorlMSncO15HtPAT2pX6r1QTpNtHkuyx-Ivga_agKGpEmgJuGsH6B9anIk5CQeE19bczvBQMvPgO9c5DUH72ZIXE",
+    "protected": "eyJlbmMiOiJBMjU2R0NNIn0",
+    "recipients": [{
+        "encrypted_key": "DfiCe3pXu0ca8tQeXOdLGQ550wr6fowsFGWlivhZY2k",
+        "header": {
+            "kid": "ABCD.1234",
+            "tag": "MpGawMmNXu3QawiKxlNi0A",
+            "iv": "4pDpJfYlQCwK_J8F"
+        }
+    }],
+    "unprotected": {"alg": "A256GCMKW"},
+    "tag": "CQs4Raq5sqZNh7AWyTnF4g",
+    "iv": "QwPVRnj3ih4FwI85"
+}

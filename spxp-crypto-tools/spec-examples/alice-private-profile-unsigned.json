@@ -1,0 +1,16 @@
+{
+    "ver" : "0.3",
+    "name" : "Crypto Alice",
+    "private" : [
+        "eyJraWQiOiJBQkNELjEyMzQiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiZGlyIn0..SfT0skkIjzru5ylj.eDnedk0RIWIk6m6YQwwwzeZg7q1GH87HW5wUqKJcWRCNZHgI5hCUmDATDzW_eeUsQp8mkkQ4fpqlrBmX5lwv3vsdmgL4r-18GVhxGhbq6GxtbR8YE2MPTxJUZ3D56QHld8ZkOV5pOu7h5BhO9f2zKNEB2j0xbNEqgr259_T983VEoqqp0Rrze1qgmshMQLkZsUrbHsnDaPsp28bhRb_zMInvhBNfa6M.zYtiVMmo-TC_BhJDGPwoHA"
+    ],
+    "profilePhoto" : " https://images.example.com/alice.jpg",
+    "friendsEndpoint" : "friends/alice",
+    "postsEndpoint" : "posts/alice",
+    "publicKey": {
+        "kid": "C8xSIBPKRTcXxFix",
+        "kty": "OKP",
+        "crv": "Ed25519",
+        "x": "skpRppgAopeYo9MWRdExl26rGA_z701tMoiuJ-jIjU8"
+    }
+}

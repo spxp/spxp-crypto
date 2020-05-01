@@ -1,0 +1,25 @@
+{
+    "seqts" : "2018-09-16T13:35:47.735",
+    "createts" : "2018-09-16T12:25:13.614",
+    "author" : "https://example.com/ctypto.bob",
+    "type" : "photo",
+    "message" : "Look at this",
+    "full" : "https://example.com/full-image.jpeg",
+    "small" : " https://example.com/small-image.jpeg",
+    "signature": {
+        "key": {
+            "publicKey": {
+                "kid": "czlHMPEJcLb7jMUI",
+                "kty": "OKP",
+                "crv": "Ed25519",
+                "x": "vg42ogNHigJnwZ0pwwMzUtaXZA49eqcfGYl2u9GR8vg"
+            },
+            "grant" : [ "post", "comment" ],
+            "signature": {
+                "key": "C8xSIBPKRTcXxFix",
+                "sig": "hmc8SolHWR8SMR8OXnYtX1Sxetvxak-uCBf92yHBfPIv-Vi-BvZHLTOScU3B-SeoPGVhyaUDz3f9SKF3NyPxBg"
+            }
+        },
+        "sig": "94dyGxvPcVuueFjVj_RwedWy5m3dasRDYf1iOxnYXUEYDS33LYzn9kqe6aIRMZchxWqlM1K_fX-uHVFDRjzSAg"
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "ver" : "0.3",
+    "name" : "Crypto Alice",
+    "about" : "I love cryptography.",
+    "website" : "https://en.wikipedia.org/wiki/Alice_and_Bob",
+    "publicKey": {
+        "kid": "C8xSIBPKRTcXxFix",
+        "kty": "OKP",
+        "crv": "Ed25519",
+        "x": "skpRppgAopeYo9MWRdExl26rGA_z701tMoiuJ-jIjU8"
+    },
+    "signature": {
+        "key": "C8xSIBPKRTcXxFix",
+        "sig": "JOaOvkupQmdMddAz846relqJitVNikBPrbzgLVEQKNRn6dFuAR_4AcGk2bYOUh58fnmxee_qcOovmRCJp40-Dg"
+    }
+}

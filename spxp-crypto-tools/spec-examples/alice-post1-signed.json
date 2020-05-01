@@ -1,0 +1,10 @@
+{
+    "seqts" : "2018-09-17T14:04:27.373",
+    "createts" : "2018-09-16T12:23:18.751",
+    "type" : "text",
+    "message" : "Hello, world!",
+    "signature": {
+        "key": "C8xSIBPKRTcXxFix1",
+        "sig": "bDOgcT4uxTKYMTuOJXDbAPc1UA2p-aGdxwplUWNStzyDRIRPu9UxaTU1IoZ1ELjBY5iRf4FEBPV09Uw9TOYuCA"
+    }
+}

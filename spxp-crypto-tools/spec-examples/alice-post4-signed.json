@@ -1,0 +1,10 @@
+{
+    "seqts" : "2018-09-15T12:35:47.735",
+    "type" : "profile",
+    "message" : "Do you know Crypto Alice?",
+    "profile" : " https://example.com/spxp/alice",
+    "signature": {
+        "key": "C8xSIBPKRTcXxFix",
+        "sig": "678UnO6pwpNb6SlkaYPzFhO7FJHM2Yor_QqWEelTaV6v5VED48f8nv4tpQ0WxFJgGyizthqXKHd9zTF-MmKLAw"
+    }
+}

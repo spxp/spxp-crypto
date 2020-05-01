@@ -1,0 +1,13 @@
+{
+    "publicKey": {
+        "kid": "czlHMPEJcLb7jMUI",
+        "kty": "OKP",
+        "crv": "Ed25519",
+        "x": "vg42ogNHigJnwZ0pwwMzUtaXZA49eqcfGYl2u9GR8vg"
+    },
+    "grant" : [ "post", "comment" ],
+    "signature": {
+        "key": "C8xSIBPKRTcXxFix",
+        "sig": "hmc8SolHWR8SMR8OXnYtX1Sxetvxak-uCBf92yHBfPIv-Vi-BvZHLTOScU3B-SeoPGVhyaUDz3f9SKF3NyPxBg"
+    }
+}

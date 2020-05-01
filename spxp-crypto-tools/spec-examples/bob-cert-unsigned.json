@@ -1,0 +1,9 @@
+{
+    "publicKey": {
+        "kid": "czlHMPEJcLb7jMUI",
+        "kty": "OKP",
+        "crv": "Ed25519",
+        "x": "vg42ogNHigJnwZ0pwwMzUtaXZA49eqcfGYl2u9GR8vg"
+    },
+    "grant" : [ "post", "comment" ]
+}
