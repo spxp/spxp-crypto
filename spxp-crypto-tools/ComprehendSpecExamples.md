@@ -135,6 +135,7 @@ Resulting in
 To verify this entire profile root object:
 ```
 $ SpxpCryptoTool verify ./spec-examples/alice-private-profile-signed.json ./spec-examples/alice-keypair.json
+Signature valid.
 ```
 You can remove the `private` array here or add additional entries and check that
 the signature remains valid. This allows the server to hide private data items if
@@ -147,8 +148,10 @@ ABCD.1234
 To finally reveal the information in this private item, decrypt it with the reader key “ABCD.1234”:
 ```
 $ SpxpCryptoTool decryptsymcompact ./spec-examples/alice-privatewebsite-encrypted.json ./spec-examples/symkey-ABCD1234.json
+{"website":"https://example.com","signature":{"key":"C8xSIBPKRTcXxFix","sig":"nEd-NXLlBDjcmCJHhzn9CaVYuRBsG4SDDgdHql85xdGtgb_bql2SnZh2oeMf-dk_g-YhT3uRyZHZRTriUEnCBA"}}
 ```
 Remember to check the signature of this fragment before merging it into the profile:
 ```
 $ SpxpCryptoTool verify ./spec-examples/alice-privatewebsite-signed-condensed.json ./spec-examples/alice-keypair.json
+Signature valid.
 ```
