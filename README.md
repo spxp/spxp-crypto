@@ -42,11 +42,11 @@ Ed25519 signature algorithm.
 ## [spxp-crypto-sdk-V02](./spxp-crypto-sdk-V02)
 Version 0.2 of SPXP used plain JOSE for all cryptograhic operations and did not
 make any limitations in the use of JOSE. Hence implementations can freely chose
-what algorithm and encoding they use.  
+whatever algorithm and encoding to use.  
 To provide this freedom, this implementation relies on Apache's CXF libraries.
 Since these libraries have a quite heavy footprint and version 0.2 is outdated
 anyway, we chose to remove this implementation from the SDK and provide it as
-an extra dependancy on top of the standard SDK.
+an extra dependency on top of the standard SDK.
 
 ## [spxp-crypto-tools](./spxp-crypto-tools)
 This project provides a commandline application for the signing and encrypting

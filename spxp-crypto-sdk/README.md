@@ -11,4 +11,4 @@ This tool is built as part of the parent multi-module maven build. It can also
 be built individually with the usual maven commands.
 
 ## Using
-The best description as of now is probably the [SpxpCryptoTool](./../spxp-crypto-tool/src/main/java/org/spxp/crypto/tool/SpxpCryptoTool.java).
+The best description as of now is probably the [SpxpCryptoTool](./../spxp-crypto-tools/src/main/java/org/spxp/crypto/tool/SpxpCryptoTool.java).
