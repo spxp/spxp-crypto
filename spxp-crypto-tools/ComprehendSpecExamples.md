@@ -1,5 +1,5 @@
 # Comprehend Examples from SPXP Spec V 0.3
-The [SPXP Specification V 0.3](./../spxp-specs/blob/master/SpxpProfileSpec-V03.md)
+The [SPXP Specification V 0.3](./../../spxp-specs/SpxpProfileSpec-V03.md)
 contains multiple examples using digital signatures and encryption. You can use
 the `SpxpCryptoTool` commandline tool to comprehend these examples by signing
 and verifying these examples yourself.
@@ -11,10 +11,10 @@ Play around with the verification command to see how the signatures are resilien
 against insignificant whitespace, character encoding and the ordering of members.
 
 ## Used Profile Keypairs and Symmetric Keys
-The keypairs used for the examples are listed in [Appendix A](./../spxp-specs/blob/master/SpxpProfileSpec-V03.md#appendix-a-private-keys-used-in-examples)
+The keypairs used for the examples are listed in [Appendix A](./../../spxp-specs/SpxpProfileSpec-V03.md#appendix-a-private-keys-used-in-examples)
 of the spec. You can find these keypairs as json files here:  
-[Profile keypair of “Crypto Alice”](./spec-examples/alice-keypair.json)
-[Profile keypair of “Crypto Bob”](./spec-examples/bob-keypair.json)
+[Profile keypair of “Crypto Alice”](./spec-examples/alice-keypair.json)  
+[Profile keypair of “Crypto Bob”](./spec-examples/bob-keypair.json)  
 [Symmetric AES key “ABCD.1234” used in chapter 10.1](./spec-examples/symkey-ABCD1234.json)
 
 ## Signed Profile of “Crypto Alice” in Chapter 7.1
@@ -38,7 +38,7 @@ $ SpxpCryptoTool verify ./spec-examples/bob-cert-signed.json ./spec-examples/ali
 ```
 
 ## Individual Posts in Chapter 9
-As [specified in 9.1](./../spxp-specs/blob/master/SpxpProfileSpec-V03.md#91-signing-and-encrypting-posts),
+As [specified in 9.1](./../../spxp-specs/SpxpProfileSpec-V03.md#91-signing-and-encrypting-posts),
 posts are signed individually. Each post in the example in chapter 9 can be signed as follows:
 ```
 $ SpxpCryptoTool sign ./spec-examples/alice-post1-unsigned.json ./spec-examples/alice-keypair.json
@@ -56,7 +56,7 @@ $ SpxpCryptoTool verify ./spec-examples/alice-post3-signed.json ./spec-examples/
 $ SpxpCryptoTool verify ./spec-examples/alice-post4-signed.json ./spec-examples/alice-keypair.json post
 ```
 Please note that we verify post 3 also against Alice's signature instead of Bob's.
-The additinal parameter `post` tells the verification tool to also accept
+The additional parameter `post` tells the verification tool to also accept
 certificates that grant the “post” permission and are ultimately signed by Alice.
 
 ## Signed and Encrypted private data in Chapter 10.5
@@ -139,7 +139,12 @@ $ SpxpCryptoTool verify ./spec-examples/alice-private-profile-signed.json ./spec
 You can remove the `private` array here or add additional entries and check that
 the signature remains valid. This allows the server to hide private data items if
 the client does not have the required reader keys.  
-To reveal the information in this private item, you can use
+To print the key that is required to decrypt this private item, you can use the `decryptsymcompact` command without a key:
+```
+$ SpxpCryptoTool decryptsymcompact ./spec-examples/alice-privatewebsite-encrypted.json
+ABCD.1234
+```
+To finally reveal the information in this private item, decrypt it with the reader key “ABCD.1234”:
 ```
 $ SpxpCryptoTool decryptsymcompact ./spec-examples/alice-privatewebsite-encrypted.json ./spec-examples/symkey-ABCD1234.json
 ```

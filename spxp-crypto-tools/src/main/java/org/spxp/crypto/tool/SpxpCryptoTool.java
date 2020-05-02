@@ -134,8 +134,10 @@ public class SpxpCryptoTool {
 		SpxpProfilePublicKey publicKey = SpxpCryptoToolsV03.getProfilePublicKey(publicJwkObj);
 		if(SpxpCryptoToolsV03.verifySignature(signedObject, publicKey, requiredGrants)) {
 			System.out.println("Signature valid.");
+			System.exit(0);
 		} else {
 			System.out.println("BROKEN Signature.");
+			System.exit(1);
 		}
 	}
 	

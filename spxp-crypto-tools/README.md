@@ -29,7 +29,7 @@ in the file `<keyPairFile>` and writes the resulting object to standard out.
 Verifies the signature on the JSON object stored in `<signedJsonFile>` with the
 public key stored in `<publicKeyFile>`.  
 If the object must be signed by a profile key directly, like a profile root
-object, no 4th must be given.  
+object, no 4th parameter must be given.  
 If the object may also be signed by a different keypair which brings a
 certificate (chain), then a 4th parameter gives a comma separated list of
 permissions that the certificate must grant to the signing key. In this case,
