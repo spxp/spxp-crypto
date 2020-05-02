@@ -1,5 +1,8 @@
 package org.spxp.crypto.tool;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -50,6 +53,10 @@ public class SpxpCryptoTool {
 			encryptsymjson(args);
 		} else if(args[0].equals("decryptsymjson")) {
 			decryptsymjson(args);
+		} else if(args[0].equals("encryptresource")) {
+			encryptresource(args);
+		} else if(args[0].equals("decryptresource")) {
+			decryptresource(args);
 		} else if(args[0].equals("help")) {
 			usage();
 		} else {
@@ -69,18 +76,29 @@ public class SpxpCryptoTool {
 		System.out.println("      verifies the signature in <signedJsonFile> with the public key stored in <publicKeyFile>");
 		System.out.println("      if certificate chains are accepted, then <requiredGrant>s give a comma separated list of");
 		System.out.println("      grant values that must be authorized from the root <publicKeyFile>");
+		System.out.println("      exits with 0 status code on success and 1 on a broken signature");
 		System.out.println("  gensymkey");
 		System.out.println("      generates a new 256 bit AES key");
 		System.out.println("  encryptsymcompact <fileToEncrypt> <symmetricKey>");
 		System.out.println("      encrypts <fileToEncrypt> with the 256 bit AES key from <symmetricKey> in JWE compact serialization");
-		System.out.println("  decryptsymcompact <fileToDecrypt> <symmetricKey>");
+		System.out.println("  decryptsymcompact <fileToDecrypt> [<symmetricKey>]");
 		System.out.println("      decrypts <fileToDecrypt> in JWE compact serialization with the 256 bit AES key from <symmetricKey>");
+		System.out.println("      prints the key id of the required key if no <symmetricKey> is given");
 		System.out.println("  encryptsymjson <fileToEncrypt> [<symmetricKey>[,<symmetricKey>]*]");
 		System.out.println("      encrypts <fileToEncrypt> with the 256 bit AES keys from the comma separated lis of <symmetricKey>s in JWE json serialization");
-		System.out.println("  decryptsymjson <fileToDecrypt> <symmetricKey>");
+		System.out.println("  decryptsymjson <fileToDecrypt> [<symmetricKey>]");
 		System.out.println("      decrypts <fileToDecrypt> in JWE json serialization with the 256 bit AES key from <symmetricKey>");
+		System.out.println("      prints the list of key ids of all keys that can be used to decrypt the content if no <symmetricKey> is given");
+		System.out.println("  encryptresource <inputFile> <outputFile> [<resourceUri>]");
+		System.out.println("      encrypts the binary data in <inputFile> with a new random 256 bit AES key, writes the encrypted data");
+		System.out.println("      to <outputFile> and prints the JSON object describing the encrypted resource to std out");
+		System.out.println("  decryptresource <inputFile> <decryptionKeyFile> <outputFile>");
+		System.out.println("      decrypts the binary data in <inputFile> with the key described in <decryptionKeyFile> and writes");
+		System.out.println("      the decrypted data to <outputFile>");
 		System.out.println("  help");
 		System.out.println("      print this screen");
+		System.out.println();
+		System.out.println("Find a detailed decription on https://github.com/spxp/spxp-crypto/spxp-crypto-tool/README.md");
 	}
 	
 	public void genkeypair(String[] args) throws Exception {
@@ -144,15 +162,19 @@ public class SpxpCryptoTool {
 	}
 	
 	public void decryptsymcompact(String[] args) throws Exception {
-		if(args.length != 3) {
+		if( (args.length < 2) || (args.length >  3) ) {
 			System.out.println("Error: Invalid number of options for command 'decryptsymcompact'");
 		}
 		String ciphertext = (new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
-		JSONObject symJwkObj = new JSONObject(new String(Files.readAllBytes(Paths.get(args[2])), StandardCharsets.UTF_8));
-		final SpxpSymmetricKeySpec keySpec = SpxpCryptoToolsV03.getSymmetricKeySpec(symJwkObj);
+		JSONObject symJwkObj = args.length > 2 ? new JSONObject(new String(Files.readAllBytes(Paths.get(args[2])), StandardCharsets.UTF_8)) : null;
+		final SpxpSymmetricKeySpec keySpec = symJwkObj != null ? SpxpCryptoToolsV03.getSymmetricKeySpec(symJwkObj) : null;
 		System.out.println(SpxpCryptoToolsV03.decryptSymmetricCompact(ciphertext, new SpxpKeyProvider() {
 			@Override
 			public SecretKey getKey(String keyId) throws SpxpCryptoNoSuchKeyException {
+				if(keySpec == null) {
+					System.out.println(keyId);
+					return null;
+				}
 				if(!keyId.equals(keySpec.getKeyId())) {
 					throw new SpxpCryptoNoSuchKeyException("Expected key with ID '"+keyId+"' bot got key id '"+keySpec.getKeyId()+"'");
 				}
@@ -179,21 +201,50 @@ public class SpxpCryptoTool {
 	}
 	
 	public void decryptsymjson(String[] args) throws Exception {
-		if(args.length != 3) {
+		if( (args.length < 2) || (args.length >  3) ) {
 			System.out.println("Error: Invalid number of options for command 'decryptsymjson'");
 		}
 		String ciphertext = (new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
-		JSONObject symJwkObj = new JSONObject(new String(Files.readAllBytes(Paths.get(args[2])), StandardCharsets.UTF_8));
-		final SpxpSymmetricKeySpec keySpec = SpxpCryptoToolsV03.getSymmetricKeySpec(symJwkObj);
+		JSONObject symJwkObj = args.length > 2 ? new JSONObject(new String(Files.readAllBytes(Paths.get(args[2])), StandardCharsets.UTF_8)) : null;
+		final SpxpSymmetricKeySpec keySpec = symJwkObj != null ? SpxpCryptoToolsV03.getSymmetricKeySpec(symJwkObj) : null;
 		System.out.println(SpxpCryptoToolsV03.decryptSymmetricJson(ciphertext, new SpxpKeyProvider() {
 			@Override
 			public SecretKey getKey(String keyId) throws SpxpCryptoNoSuchKeyException {
+				if(keySpec == null) {
+					System.out.println(keyId);
+					return null;
+				}
 				if(!keyId.equals(keySpec.getKeyId())) {
 					throw new SpxpCryptoNoSuchKeyException("Expected key with ID '"+keyId+"' bot got key id '"+keySpec.getKeyId()+"'");
 				}
 				return new SecretKeySpec(keySpec.getSymmetricKey(), "AES");
 			}
 		}));
+	}
+	
+	public void encryptresource(String[] args) throws Exception {
+		if( (args.length < 3) || (args.length > 4) ) {
+			System.out.println("Error: Invalid number of options for command 'encryptresource'");
+		}
+		FileInputStream src = new FileInputStream(new File(args[0]));
+		FileOutputStream dest = new FileOutputStream(new File(args[1]));
+		String uri = args.length > 3 ? args[2] : null;
+		JSONObject obj = new JSONObject(SpxpCryptoToolsV03.encryptResource(src, dest, uri));
+		try(PrintWriter writer = new PrintWriter(System.out)) {
+			obj.write(writer, 4, 0);
+		}
+	}
+	
+	public void decryptresource(String[] args) throws Exception {
+		if(args.length != 4) {
+			System.out.println("Error: Invalid number of options for command 'decryptresource'");
+		}
+		String resJson = new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8);
+		try(FileInputStream src = new FileInputStream(new File(args[0]))) {
+			try(FileOutputStream dest = new FileOutputStream(new File(args[2]))) {
+				SpxpCryptoToolsV03.decryptResource(src, dest, resJson);
+			}
+		}
 	}
 
 }
