@@ -82,7 +82,7 @@ resulting in
     }
 }
 ```
-Next, insignificant whitespace is removed and this object is encrypted with the key “ABCD.1234”:
+Next, insignificant whitespace is removed and [this object](./spec-examples/alice-privatewebsite-signed-condensed.json) is then encrypted with the key “ABCD.1234”:
 ```
 $ SpxpCryptoTool encryptsymcompact ./spec-examples/alice-privatewebsite-signed-condensed.json ./spec-examples/symkey-ABCD1234.json
 ```
