@@ -36,8 +36,8 @@ $ cat john-doe-keypair.json
 You need to make sure to properly secure and backup this file! If you loose it,
 you will not be able to reclaiming your own profile. And if it gets accidentally
 exposed, your profile is compromised.  
-This KeyPair contains the private key `d` as well as the public key `x`. We
-will later need just the public key to include it in our new profile. You can
+This KeyPair contains the private key `d` as well as the public key `x`. Later
+on, we will just need the public key to include it in our new profile. You can
 now simply copy this file and remove your private key `d` to just have your
 public key. Or you can use the `SpxpCryptoTool` for this operation as well:
 ```
@@ -227,7 +227,7 @@ The format of the timestamp in `seqts` is year-month-day, plus the character
 `T` and then the time in 24h format including milliseconds. This timestamp is
 always in UTC. This post then needs to be signed:
 ```
-$ SpxpCryptoTool sign john-doe-post1-unsigned.json john-doe-keypair.json > john-doe-post1.json
+$ SpxpCryptoTool sign john-doe-post1-unsigned.json john-doe-keypair.json > john-doe-post1-signed.json
 ```
 And we can create a second post, this time with a picture:
 ```
@@ -245,7 +245,7 @@ and add this information:
 ```
 ...and sign it...
 ```
-$ SpxpCryptoTool sign john-doe-post2-unsigned.json john-doe-keypair.json > john-doe-post2.json
+$ SpxpCryptoTool sign john-doe-post2-unsigned.json john-doe-keypair.json > john-doe-post2-signed.json
 ```
 Both posts are then combined in one single file:
 ```
@@ -278,9 +278,9 @@ with this content
     "more": false
 }
 ```
-And we need to reference this file as well in the profile root file. We decide
-to upload it to the same folder on our webserver as the other two files under
-the filename `john-doe-posts`. So we extend the profile root file as:
+As before, this new file must be referenced in the profile root file. We decide
+to upload it to the same folder on our webserver under the filename
+`john-doe-posts`. So we extend the profile root file as:
 ```json
 {
     "ver": "0.3",
@@ -303,7 +303,7 @@ client and see these two posts appear in the timeline.
 
 ### Limited visibility with End-to-End Encryption
 One key feature of SPXP is the ability to limit the visibility of selected
-information to a limited audience &mdash; with full end-to-end encryption.  
+information to a limited audience &emdash; with full end-to-end encryption.  
 To publish encrypted information, we first need to create a symmetric encryption
 key:
 ```
