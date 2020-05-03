@@ -1,0 +1,16 @@
+{
+    "ver": "0.3",
+    "name": "John Doe",
+    "about": "Hey, look, I have a SPXP profile!",
+    "website": "https://example.com",
+    "publicKey": {
+        "kid": "-MUelyMS_IJ6Lc5b",
+        "kty": "OKP",
+        "crv": "Ed25519",
+        "x": "F1MQVHdxYR62bmvepQXKbNOUxfy0wCynqaCraXPzMGs"
+    },
+    "signature": {
+        "key": "-MUelyMS_IJ6Lc5b",
+        "sig": "jzRBoJvSD4s9nA8MK3WQAyqna5acLug1TAVxtWtleSO7pAWBz4XCIQkoz2Wcl1fJ3XYuooEg3D7f9IX7Uck7DQ"
+    }
+}

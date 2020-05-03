@@ -1,0 +1,25 @@
+{
+    "ciphertext": "KtUPkw-b6hUvV9OTrAaF1455NU1BAPobDt63laufWSWjOV1IUJy9BWW8DohKIhwlqDi1tP6jQV_WLjh5PIrHo5U7mYCiPt1W7CWWXSyrNftONFC1k6BR96bmwtG6abG-x3dGpdDvdqgqZ6QCdYZj3RjjXDRpz2JyQolWmSf1rKvWTn3fYiKN2PB1WWLMQsWlB5w2WyfCNG9HxT9vbDBvnfR1XjnlrAKRY1GBhCP7AoYpnXcSrst7Xz6fTuVKWYbmRj8dPKL5STqQLONq",
+    "protected": "eyJlbmMiOiJBMjU2R0NNIn0",
+    "recipients": [
+        {
+            "encrypted_key": "ZCZyrhlSC6s8UHAexa9bfT2q67MBAwuuCYw7NqcrSd0",
+            "header": {
+                "kid": "97hAmlFbPIEGgJ8E",
+                "tag": "KF0W2Ap4S22oDbMieNjTXw",
+                "iv": "P96L1GeqcBSAkyAK"
+            }
+        },
+        {
+            "encrypted_key": "Hi4yNfEu9d6SYYHclRJs76DhYau0dLkmqj7la_7E8ro",
+            "header": {
+                "kid": "aTS9WBP2n5oOr3o4",
+                "tag": "_jyHQbIHUXb00jMJ1uZx7g",
+                "iv": "asBf81T-hoY2WZPF"
+            }
+        }
+    ],
+    "unprotected": {"alg": "A256GCMKW"},
+    "tag": "s7qB_RdOTlI1k9EBR9E98g",
+    "iv": "FA9Vdb4Ol6xdwYkf"
+}

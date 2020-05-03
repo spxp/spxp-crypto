@@ -1,0 +1,13 @@
+{
+    "ver": "0.3",
+    "name":  "John Doe",
+    "about":  "Hey, look, I have a SPXP profile!",
+    "website":  "https://example.com",
+    "friendsEndpoint": "john-doe-friends",
+    "publicKey"  : {
+        "kid": "-MUelyMS_IJ6Lc5b",
+        "kty": "OKP",
+        "crv": "Ed25519",
+        "x": "F1MQVHdxYR62bmvepQXKbNOUxfy0wCynqaCraXPzMGs"
+    }
+}

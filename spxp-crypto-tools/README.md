@@ -21,6 +21,11 @@ This tool provides these commands:
 `$ SpxpCryptoTool genkeypair`  
 Generates a new profile keypair and prints it as JWK object to standard out.
 
+`$ SpxpCryptoTool extractpublic <keyPairFile>`  
+Extracts just the public key part from the keypair stored in `<keyPairFile>`
+and prints it as JWK object to standard out. The file `<keyPairFile>` remains
+unchanged.
+
 `$ SpxpCryptoTool sign <jsonFileToSign> <keyPairFile>`  
 Signs the JSON object in the file `<jsonFileToSign>` with the secret key stored
 in the file `<keyPairFile>` and writes the resulting object to standard out.

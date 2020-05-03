@@ -41,6 +41,8 @@ public class SpxpCryptoTool {
 			genkeypair(args);
 		} else if(args[0].equals("sign")) {
 			sign(args);
+		} else if(args[0].equals("extractpublic")) {
+			extractpublic(args);
 		} else if(args[0].equals("verify")) {
 			verify(args);
 		} else if(args[0].equals("gensymkey")) {
@@ -70,6 +72,8 @@ public class SpxpCryptoTool {
 		System.out.println("Commands:");
 		System.out.println("  genkeypair");
 		System.out.println("      generates a new profile keypair");
+		System.out.println("  extractpublic <keyPairFile>");
+		System.out.println("      extracts just the public key part from the keypair stored in <keyPairFile>");
 		System.out.println("  sign <jsonFileToSign> <keyPairFile>");
 		System.out.println("      signs the json object in <jsonFileToSign> with the secret key stored in <keyPairFile>");
 		System.out.println("  verify <signedJsonFile> <publicKeyFile> [<requiredGrant>[,<requiredGrant>]*]");
@@ -108,6 +112,18 @@ public class SpxpCryptoTool {
 		SpxpProfileKeyPair keypair = SpxpCryptoToolsV03.generateProfileKeyPair();
 		try(PrintWriter writer = new PrintWriter(System.out)) {
 			SpxpCryptoToolsV03.getKeypairJWK(keypair).write(writer, 4, 0);
+		}
+	}
+	
+	public void extractpublic(String[] args) throws Exception {
+		if(args.length != 2) {
+			System.out.println("Error: Invalid number of options for command 'extractpublic'");
+		}
+		JSONObject keypairJwkObj = new JSONObject(new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
+		SpxpProfileKeyPair keypair = SpxpCryptoToolsV03.getProfileKeyPair(keypairJwkObj);
+		JSONObject publicJwk = SpxpCryptoToolsV03.getPublicJWK(keypair);
+		try(PrintWriter writer = new PrintWriter(System.out)) {
+			publicJwk.write(writer, 4, 0);
 		}
 	}
 	
