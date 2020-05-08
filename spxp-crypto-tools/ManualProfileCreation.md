@@ -632,12 +632,12 @@ $ vi john-doe-keys.json
 Let's assume we have the following key ids:
 | keyid | Key |
 |---|---|
-| AliceAliceAliceA | Individual key for “Alice” (alice-key.json) |
-| BobBobBobBobBobB | Individual key for “Bob” (bob-key.json) |
-| CharlesCharlesCh | Individual key for “Charles” (charles-key.json) |
-| DaveDaveDaveDave | Individual key for “Dave” (dave-key.json) |
-| CloseFriendsClos.11111111 | Round 1 key for “Close Friends” (closefriends-round1.json) |
-| BusinessContacts.11111111 | Round 1 key for “Business Contacts” (businesscontacts-round1.json) |
+| `AliceAliceAliceA` | Individual key for “Alice” (alice-key.json) |
+| `BobBobBobBobBobB` | Individual key for “Bob” (bob-key.json) |
+| `CharlesCharlesCh` | Individual key for “Charles” (charles-key.json) |
+| `DaveDaveDaveDave` | Individual key for “Dave” (dave-key.json) |
+| `CloseFriendsClos.11111111` | Round 1 key for “Close Friends” (closefriends-round1.json) |
+| `BusinessContacts.11111111` | Round 1 key for “Business Contacts” (businesscontacts-round1.json) |
 
 Then we organise the keys in a JSON structure as follows:
 ```json
@@ -647,7 +647,7 @@ Then we organise the keys in a JSON structure as follows:
             "11111111": "<closefriends-round1-alice.json>"
         }
     },
-    BobBobBobBobBobB": {
+    "BobBobBobBobBobB": {
         "CloseFriendsClos": {
             "11111111": "<closefriends-round1-bob.json>"
         }
