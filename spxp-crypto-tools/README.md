@@ -45,6 +45,10 @@ Exits with 0 status code on success and 1 on a broken signature.
 `$ SpxpCryptoTool gensymkey`  
 Generates a new 256 bit AES key and prints it as JWK object to standard out.
 
+`$ SpxpCryptoTool genroundkey`  
+Generates a new 256 bit AES key with a key id suitable as round key and prints
+it as JWK object to standard out.
+
 `$ SpxpCryptoTool encryptsymcompact <fileToEncrypt> <symmetricKey>`  
 Encrypts `<fileToEncrypt>` with the 256 bit AES key from `<symmetricKey>` and
 prints the result as JWE object in compact serialization to standard out.  

@@ -1,0 +1,14 @@
+{
+    "small": {
+        "k": "Iok36Sqr4sl7VHFB_K9dtPTndmqbY2Mh4zm_IuJpvcg",
+        "tag": "kbWD8V3dDYXcPGpx3A6Mag",
+        "iv": "VjHEHo0wIwSf-i7-",
+        "uri": "private-photo.encrypted"
+    },
+    "signature": {
+        "sig": "l87N0MIgNPaOm38uDpn2a1xa4xH12ovHbuo18LZTWb-S9ywghVOk35jGQo3eUd6ES9i0LKNPaVkgbUFg_uIhCQ",
+        "key": "-MUelyMS_IJ6Lc5b"
+    },
+    "type": "photo",
+    "message": "Look at this!"
+}

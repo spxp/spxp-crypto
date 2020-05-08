@@ -47,6 +47,8 @@ public class SpxpCryptoTool {
 			verify(args);
 		} else if(args[0].equals("gensymkey")) {
 			gensymkey(args);
+		} else if(args[0].equals("genroundkey")) {
+			genroundkey(args);
 		} else if(args[0].equals("encryptsymcompact")) {
 			encryptsymcompact(args);
 		} else if(args[0].equals("decryptsymcompact")) {
@@ -83,6 +85,8 @@ public class SpxpCryptoTool {
 		System.out.println("      exits with 0 status code on success and 1 on a broken signature");
 		System.out.println("  gensymkey");
 		System.out.println("      generates a new 256 bit AES key");
+		System.out.println("  genroundkey");
+		System.out.println("      generates a new 256 bit AES key with a key-id suitable as round key");
 		System.out.println("  encryptsymcompact <fileToEncrypt> <symmetricKey>");
 		System.out.println("      encrypts <fileToEncrypt> with the 256 bit AES key from <symmetricKey> in JWE compact serialization");
 		System.out.println("  decryptsymcompact <fileToDecrypt> [<symmetricKey>]");
@@ -163,6 +167,18 @@ public class SpxpCryptoTool {
 		}
 		byte[] key = SpxpCryptoToolsV03.generateSymmetricKey(256);
 		String kid = SpxpCryptoToolsV03.generateRandomKeyId(KeyIdSize.LONG);
+		SpxpSymmetricKeySpec keySpec = new SpxpSymmetricKeySpec(kid, key);
+		try(PrintWriter writer = new PrintWriter(System.out)) {
+			SpxpCryptoToolsV03.getSymmetricJWK(keySpec).write(writer, 4, 0);
+		}
+	}
+	
+	public void genroundkey(String[] args) throws Exception {
+		if(args.length != 1) {
+			System.out.println("Error: Command 'gensymkey' does not take any options");
+		}
+		byte[] key = SpxpCryptoToolsV03.generateSymmetricKey(256);
+		String kid = SpxpCryptoToolsV03.generateRandomKeyId(KeyIdSize.LONG)+"."+SpxpCryptoToolsV03.generateRandomKeyId(KeyIdSize.SHORT);
 		SpxpSymmetricKeySpec keySpec = new SpxpSymmetricKeySpec(kid, key);
 		try(PrintWriter writer = new PrintWriter(System.out)) {
 			SpxpCryptoToolsV03.getSymmetricJWK(keySpec).write(writer, 4, 0);

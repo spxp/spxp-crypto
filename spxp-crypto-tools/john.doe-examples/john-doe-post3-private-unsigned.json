@@ -1,0 +1,10 @@
+{
+    "type" : "photo",
+    "message" : "Look at this!",
+    "small": {
+        "iv": "VjHEHo0wIwSf-i7-",
+        "k": "Iok36Sqr4sl7VHFB_K9dtPTndmqbY2Mh4zm_IuJpvcg",
+        "tag": "kbWD8V3dDYXcPGpx3A6Mag",
+        "uri": "private-photo.encrypted"
+    }
+}
