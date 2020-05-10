@@ -12,8 +12,10 @@ jar file in the target directory. To use it outside of this build, you need to
 adopt these files slightly.
 
 ## Example usage
-This tool can be used to [comprehend the examples from the SPXP Spec](./ComprehendSpecExamples.md).  
-We also have a page showing how to [manually create a SPXP profile](./ManualProfileCreation.md).
+This tool can be used to
+- [comprehend the examples from the SPXP Spec](./ComprehendSpecExamples.md)  
+- [manually create a SPXP profile](./ManualProfileCreation.md)
+- [explore the testbed profiles](./ExploreTestbedProfiles.md)
 
 ## Command Reference
 This tool provides these commands:
