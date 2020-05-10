@@ -1,12 +1,12 @@
 # Explore Testbed Profiles
-We provide a set of automatically created profiles on [http://textbed.spxp.org]
+We provide a set of automatically created profiles on http://textbed.spxp.org
 which can be used as a testbed during the development of SPXP clients. They can
 also serve as a reference for SPXP server implementations.
 
 ### List of available profiles
 This site provides profiles for multiple versions. You can find a list of all
 available profiles of version 0.3 on this page:  
-[http://testbed.spxp.org/0.3/]  
+http://testbed.spxp.org/0.3/  
 This page contains links to the profile URIs of each profile as well as QR code
 images of the profile URIs. When you click one of the links, it will open in the
 browser.
@@ -60,6 +60,7 @@ $ cat angrybear287-profile-root.json | jq '.publicKey' > angrybear287-publickey.
 Now we can verify the signature of the profile root object:
 ```
 $ SpxpCryptoTool verify angrybear287-profile-root.json angrybear287-publickey.json
+Signature valid.
 ```
 If the signature is broken, the entire profile must be rejected. If the client
 detects a change in the publicKey, it has to warn the user and must treat
@@ -188,6 +189,7 @@ $ cat angrybear287-readerkey-for-blackfish356.json
   "alg": "A256GCM",
   "k": "lBRFZUwHdplZQ5TcN4d590GOXhfg6MLf95oKDAv_Xb8"
 }
+```
 With this information, we can now ask the keys endpoint to give us all
 intermediate keys so  that we are able to finally read the private data:
 ```
