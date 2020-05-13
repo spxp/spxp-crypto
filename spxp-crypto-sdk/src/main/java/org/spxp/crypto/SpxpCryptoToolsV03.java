@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -122,7 +120,7 @@ public class SpxpCryptoToolsV03 {
 	          .append(encodedAuthTag);
 	        return sb.toString();
 		}
-		catch(NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException e)
+		catch(JSONException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException e)
 		{
 			throw new SpxpCryptoException(e);
 		}
@@ -289,7 +287,7 @@ public class SpxpCryptoToolsV03 {
 			if(!alg.equals("A256GCMKW")) {
 				throw new SpxpCryptoException("Unsupported algortithm");
 			}
-			String protectedHeadersJson = new String(decodeBase64Url(obj.getString("protected")), "UTF-8");
+			String protectedHeadersJson = new String(decodeBase64Url(obj.getString("protected")), StandardCharsets.UTF_8);
 			JSONObject protectedHeader = new JSONObject(protectedHeadersJson);
 			String enc = protectedHeader.getString("enc");
 			if(!enc.equals("A256GCM")) {
@@ -345,9 +343,9 @@ public class SpxpCryptoToolsV03 {
 	        c.updateAAD(aad);
 	        byte[] decrypted = c.doFinal(encryptedContentWithTag);
 	        // return as String
-			return new String(decrypted, Charset.forName("UTF-8"));
+			return new String(decrypted, StandardCharsets.UTF_8);
 		}
-		catch(IllegalArgumentException | UnsupportedEncodingException | JSONException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e)
+		catch(IllegalArgumentException | JSONException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e)
 		{
 			throw new SpxpCryptoException(e);
 		}
@@ -412,7 +410,7 @@ public class SpxpCryptoToolsV03 {
 				result.put("uri", uri);
 			}
 			return result.toString();
-		} catch(NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
+		} catch(NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | JSONException e) {
 			throw new SpxpCryptoException(e);
 		}
 	}
@@ -570,7 +568,11 @@ public class SpxpCryptoToolsV03 {
 		} catch (JSONException | IOException e) {
 			return false;
 		}
+		try {
         return org.bouncycastle.math.ec.rfc8032.Ed25519.verify(sig, 0, signingPublicKey, 0, canonicalizedBytes, 0, canonicalizedBytes.length);
+		} catch(IllegalArgumentException | IllegalStateException e) {
+			return false;
+		}
 	}
 	
 	public static String canonicalize(JSONObject jsonObject, Set<String> omitMembers) throws JSONException, IOException {
@@ -725,47 +727,59 @@ public class SpxpCryptoToolsV03 {
 		return jwkObj;
 	}
 	
-	public static SpxpProfileKeyPair getProfileKeyPair(JSONObject jwk) {
+	public static SpxpProfileKeyPair getProfileKeyPair(JSONObject jwk) throws SpxpCryptoException {
+		try {
 		String kid = jwk.getString("kid");
 		String kty = jwk.getString("kty");
 		if(!kty.equals("OKP")) {
-			throw new IllegalArgumentException("Invalid key type. Expected OKP");
+				throw new SpxpCryptoException("Invalid key type. Expected OKP");
 		}
 		String crv = jwk.getString("crv");
 		if(!crv.equals("Ed25519")) {
-			throw new IllegalArgumentException("Invalid curve. Expected Ed25519");
+				throw new SpxpCryptoException("Invalid curve. Expected Ed25519");
 		}
 		byte[] x = decodeBase64Url(jwk.getString("x"));
 		byte[] d = decodeBase64Url(jwk.getString("d"));
 		return new SpxpProfileKeyPair(kid, d, x);
+		} catch(IllegalArgumentException | JSONException e) {
+			throw new SpxpCryptoException("Invalid keypair", e);
+		}
 	}
 	
-	public static SpxpProfilePublicKey getProfilePublicKey(JSONObject jwk) {
+	public static SpxpProfilePublicKey getProfilePublicKey(JSONObject jwk) throws SpxpCryptoException {
+		try {
 		String kid = jwk.getString("kid");
 		String kty = jwk.getString("kty");
 		if(!kty.equals("OKP")) {
-			throw new IllegalArgumentException("Invalid key type. Expected OKP");
+				throw new SpxpCryptoException("Invalid key type. Expected OKP");
 		}
 		String crv = jwk.getString("crv");
 		if(!crv.equals("Ed25519")) {
-			throw new IllegalArgumentException("Invalid curve. Expected Ed25519");
+				throw new SpxpCryptoException("Invalid curve. Expected Ed25519");
 		}
 		byte[] x = decodeBase64Url(jwk.getString("x"));
 		return new SpxpProfilePublicKey(kid, x);
+		} catch(IllegalArgumentException | JSONException e) {
+			throw new SpxpCryptoException("Invalid public key", e);
+		}
 	}
 	
-	public static SpxpSymmetricKeySpec getSymmetricKeySpec(JSONObject jwk) {
+	public static SpxpSymmetricKeySpec getSymmetricKeySpec(JSONObject jwk) throws SpxpCryptoException {
+		try {
 		String kid = jwk.getString("kid");
 		String kty = jwk.getString("kty");
 		if(!kty.equals("oct")) {
-			throw new IllegalArgumentException("Invalid key type. Expected oct");
+				throw new SpxpCryptoException("Invalid key type. Expected oct");
 		}
 		String alg = jwk.getString("alg");
 		if(!alg.equals("A256GCM")) {
-			throw new IllegalArgumentException("Invalid alg. Expected A256GCM");
+				throw new SpxpCryptoException("Invalid alg. Expected A256GCM");
 		}
 		byte[] k = decodeBase64Url(jwk.getString("k"));
 		return new SpxpSymmetricKeySpec(kid, k);
+		} catch(IllegalArgumentException | JSONException e) {
+			throw new SpxpCryptoException("Invalid symmetric key", e);
+		}
 	}
 
 }
