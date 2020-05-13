@@ -21,5 +21,13 @@ public class SpxpSymmetricKeySpec {
 	public byte[] getSymmetricKey() {
 		return symmetricKey;
 	}
+	
+	public boolean equals(Object other) {
+		if(!(other instanceof SpxpSymmetricKeySpec)) {
+			return false;
+		}
+		SpxpSymmetricKeySpec otherSymmetricKeySpec = (SpxpSymmetricKeySpec) other;
+		return this.keyId.equals(otherSymmetricKeySpec.getKeyId()) && this.symmetricKey.equals(otherSymmetricKeySpec.getSymmetricKey());
+	}
 
 }

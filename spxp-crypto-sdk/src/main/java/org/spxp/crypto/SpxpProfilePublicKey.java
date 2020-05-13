@@ -21,5 +21,13 @@ public class SpxpProfilePublicKey {
 	public byte[] getPublicKey() {
 		return publicKey;
 	}
+	
+	public boolean equals(Object other) {
+		if(!(other instanceof SpxpProfilePublicKey)) {
+			return false;
+		}
+		SpxpProfilePublicKey otherPublicKey = (SpxpProfilePublicKey) other;
+		return this.keyId.equals(otherPublicKey.getKeyId()) && this.publicKey.equals(otherPublicKey.getPublicKey());
+	}
 
 }
