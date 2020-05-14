@@ -260,9 +260,9 @@ public class SpxpCryptoTool {
 		if( (args.length < 3) || (args.length > 4) ) {
 			System.out.println("Error: Invalid number of options for command 'encryptresource'");
 		}
-		FileInputStream src = new FileInputStream(new File(args[0]));
-		FileOutputStream dest = new FileOutputStream(new File(args[1]));
-		String uri = args.length > 3 ? args[2] : null;
+		FileInputStream src = new FileInputStream(new File(args[1]));
+		FileOutputStream dest = new FileOutputStream(new File(args[2]));
+		String uri = args.length > 3 ? args[3] : null;
 		JSONObject obj = new JSONObject(SpxpCryptoToolsV03.encryptResource(src, dest, uri));
 		try(PrintWriter writer = new PrintWriter(System.out)) {
 			obj.write(writer, 4, 0);
@@ -273,9 +273,9 @@ public class SpxpCryptoTool {
 		if(args.length != 4) {
 			System.out.println("Error: Invalid number of options for command 'decryptresource'");
 		}
-		String resJson = new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8);
-		try(FileInputStream src = new FileInputStream(new File(args[0]))) {
-			try(FileOutputStream dest = new FileOutputStream(new File(args[2]))) {
+		String resJson = new String(Files.readAllBytes(Paths.get(args[2])), StandardCharsets.UTF_8);
+		try(FileInputStream src = new FileInputStream(new File(args[1]))) {
+			try(FileOutputStream dest = new FileOutputStream(new File(args[3]))) {
 				SpxpCryptoToolsV03.decryptResource(src, dest, resJson);
 			}
 		}

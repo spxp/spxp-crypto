@@ -163,6 +163,46 @@ additional parameter `post,impersonate` on the `SpxpCryptoTool` allows
 certificate chains that grant at least the “post” and the “impersonate”
 permission to the signing key pair.
 
+### Reading encrypted resources
+Let's take a look at another profile:
+```
+$ curl http://testbed.spxp.org/0.3/lazygoose708
+{
+    "ver": "0.3",
+    "name": "Aapo Kotila",
+    "birthDayAndMonth": "17-09",
+    "profilePhoto": {
+        "iv": "5vgpan7Q5chU_R77",
+        "k": "n383vQAj-mXPbgY-5Ed4y2ruGXUhVo9dIT9BLZP3--Q",
+        "tag": "LQ0SFA6TTbO5fb2ld2hpjg",
+        "uri": "images_enc/lazygoose708.encrypted"
+    },
+    "friendsEndpoint": "friends/lazygoose708",
+    "postsEndpoint": "posts/_read-posts.php?profile=lazygoose708",
+    "keysEndpoint": "keys/_read-keys.php?profile=lazygoose708",
+    "publicKey": {
+        "kid": "key-lazygoose708",
+        "kty": "OKP",
+        "crv": "Ed25519",
+        "x": "wsqBhM-pfIYrewKfdq3t840rgLG-uC2BKs4clHsOLUM"
+    },
+    "private": [
+    ],
+    "signature": {
+        "sig": "PlXzTso8qJ3j8PijjZUvYZslLLQXfzmCnSnl4VUnFIh_WdjwQjGIFl460UTAh10Kaf1qvhmNq2qCr0olXq5-DQ",
+        "key": "key-lazygoose708"
+    }
+}
+```
+This profile uses an encrypted resource as profile photo. First, we need to
+download the encrypted resource and extract the profile photo object:
+```
+$ curl http://testbed.spxp.org/0.3/images_enc/lazygoose708.encrypted --output lazygoose708.encrypted 
+$ curl http://testbed.spxp.org/0.3/lazygoose708 | '.profilePhoto' > lazygoose708-profilephoto.json
+$ SpxpCryptoTool decryptresource lazygoose708.encrypted lazygoose708-profilephoto.json lazygoose708.jpeg
+```
+You can now open the decrypted profile image.
+
 ### Reading private data
 The profile root object has a `private` array with two elements. A SPXP server
 would typically redact this information unless the client provides a `reader`
