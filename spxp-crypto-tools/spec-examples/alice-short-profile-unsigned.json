@@ -1,7 +1,7 @@
 {
     "ver" : "0.3",
     "name" : "Crypto Alice",
-    "about" : "I love cryptography.",
+    "shortInfo" : "I love cryptography.",
     "website" : "https://en.wikipedia.org/wiki/Alice_and_Bob",
     "publicKey": {
         "kid": "C8xSIBPKRTcXxFix",

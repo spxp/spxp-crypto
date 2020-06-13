@@ -5,7 +5,6 @@ import java.util.HashMap;
 public enum SpxpCertificatePermission {
 	
 	POST("post"),
-	COMMENT("comment"),
 	FRIENDS("friends"),
 	GRANT("grant"),
 	CA("ca"),

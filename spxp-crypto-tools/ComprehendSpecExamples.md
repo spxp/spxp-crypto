@@ -44,7 +44,6 @@ posts are signed individually. Each post in the example in chapter 9 can be sign
 $ SpxpCryptoTool sign ./spec-examples/alice-post1-unsigned.json ./spec-examples/alice-keypair.json
 $ SpxpCryptoTool sign ./spec-examples/alice-post2-unsigned.json ./spec-examples/alice-keypair.json
 $ SpxpCryptoTool sign ./spec-examples/alice-post3-unsigned.json ./spec-examples/bob-keypair.json
-$ SpxpCryptoTool sign ./spec-examples/alice-post4-unsigned.json ./spec-examples/alice-keypair.json
 ```
 Please note that post 3 is signed by Bob. You need to later replace the String member `key` in
 this signature with Bob's certificate.  
@@ -53,7 +52,6 @@ To verify these signatures:
 $ SpxpCryptoTool verify ./spec-examples/alice-post1-signed.json ./spec-examples/alice-keypair.json post
 $ SpxpCryptoTool verify ./spec-examples/alice-post2-signed.json ./spec-examples/alice-keypair.json post
 $ SpxpCryptoTool verify ./spec-examples/alice-post3-signed.json ./spec-examples/alice-keypair.json post
-$ SpxpCryptoTool verify ./spec-examples/alice-post4-signed.json ./spec-examples/alice-keypair.json post
 ```
 Please note that we verify post 3 also against Alice's signature instead of Bob's.
 The additional parameter `post` tells the verification tool to also accept
