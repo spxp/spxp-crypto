@@ -112,6 +112,7 @@ public class SpxpCryptoTool {
 	public void genkeypair(String[] args) throws Exception {
 		if(args.length != 1) {
 			System.out.println("Error: Command 'genkeypair' does not take any options");
+			return;
 		}
 		SpxpProfileKeyPair keypair = SpxpCryptoToolsV03.generateProfileKeyPair();
 		try(PrintWriter writer = new PrintWriter(System.out)) {
@@ -122,6 +123,7 @@ public class SpxpCryptoTool {
 	public void extractpublic(String[] args) throws Exception {
 		if(args.length != 2) {
 			System.out.println("Error: Invalid number of options for command 'extractpublic'");
+            return;
 		}
 		JSONObject keypairJwkObj = new JSONObject(new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
 		SpxpProfileKeyPair keypair = SpxpCryptoToolsV03.getProfileKeyPair(keypairJwkObj);
@@ -134,6 +136,7 @@ public class SpxpCryptoTool {
 	public void sign(String[] args) throws Exception {
 		if(args.length != 3) {
 			System.out.println("Error: Invalid number of options for command 'sign'");
+            return;
 		}
 		JSONObject objToSign = new JSONObject(new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
 		JSONObject keypairJwkObj = new JSONObject(new String(Files.readAllBytes(Paths.get(args[2])), StandardCharsets.UTF_8));
@@ -147,6 +150,7 @@ public class SpxpCryptoTool {
 	public void verify(String[] args) throws Exception {
 		if(args.length < 3 || args.length > 4) {
 			System.out.println("Error: Invalid number of options for command 'verify'");
+            return;
 		}
 		JSONObject signedObject = new JSONObject(new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
 		JSONObject publicJwkObj = new JSONObject(new String(Files.readAllBytes(Paths.get(args[2])), StandardCharsets.UTF_8));
@@ -164,6 +168,7 @@ public class SpxpCryptoTool {
 	public void gensymkey(String[] args) throws Exception {
 		if(args.length != 1) {
 			System.out.println("Error: Command 'gensymkey' does not take any options");
+            return;
 		}
 		byte[] key = SpxpCryptoToolsV03.generateSymmetricKey(256);
 		String kid = SpxpCryptoToolsV03.generateRandomKeyId(KeyIdSize.LONG);
@@ -176,6 +181,7 @@ public class SpxpCryptoTool {
 	public void genroundkey(String[] args) throws Exception {
 		if(args.length != 1) {
 			System.out.println("Error: Command 'gensymkey' does not take any options");
+            return;
 		}
 		byte[] key = SpxpCryptoToolsV03.generateSymmetricKey(256);
 		String kid = SpxpCryptoToolsV03.generateRandomKeyId(KeyIdSize.LONG)+"."+SpxpCryptoToolsV03.generateRandomKeyId(KeyIdSize.SHORT);
@@ -188,6 +194,7 @@ public class SpxpCryptoTool {
 	public void encryptsymcompact(String[] args) throws Exception {
 		if(args.length != 3) {
 			System.out.println("Error: Invalid number of options for command 'encryptsymcompact'");
+            return;
 		}
 		String payload = (new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
 		JSONObject symJwkObj = new JSONObject(new String(Files.readAllBytes(Paths.get(args[2])), StandardCharsets.UTF_8));
@@ -198,6 +205,7 @@ public class SpxpCryptoTool {
 	public void decryptsymcompact(String[] args) throws Exception {
 		if( (args.length < 2) || (args.length >  3) ) {
 			System.out.println("Error: Invalid number of options for command 'decryptsymcompact'");
+            return;
 		}
 		String ciphertext = (new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
 		JSONObject symJwkObj = args.length > 2 ? new JSONObject(new String(Files.readAllBytes(Paths.get(args[2])), StandardCharsets.UTF_8)) : null;
@@ -220,6 +228,7 @@ public class SpxpCryptoTool {
 	public void encryptsymjson(String[] args) throws Exception {
 		if(args.length != 3) {
 			System.out.println("Error: Invalid number of options for command 'encryptsymjson'");
+            return;
 		}
 		String payload = (new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
 		List<SpxpSymmetricKeySpec> keys = new LinkedList<>();
@@ -237,6 +246,7 @@ public class SpxpCryptoTool {
 	public void decryptsymjson(String[] args) throws Exception {
 		if( (args.length < 2) || (args.length >  3) ) {
 			System.out.println("Error: Invalid number of options for command 'decryptsymjson'");
+            return;
 		}
 		String ciphertext = (new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
 		JSONObject symJwkObj = args.length > 2 ? new JSONObject(new String(Files.readAllBytes(Paths.get(args[2])), StandardCharsets.UTF_8)) : null;
@@ -259,6 +269,7 @@ public class SpxpCryptoTool {
 	public void encryptresource(String[] args) throws Exception {
 		if( (args.length < 3) || (args.length > 4) ) {
 			System.out.println("Error: Invalid number of options for command 'encryptresource'");
+            return;
 		}
 		FileInputStream src = new FileInputStream(new File(args[1]));
 		FileOutputStream dest = new FileOutputStream(new File(args[2]));
@@ -272,6 +283,7 @@ public class SpxpCryptoTool {
 	public void decryptresource(String[] args) throws Exception {
 		if(args.length != 4) {
 			System.out.println("Error: Invalid number of options for command 'decryptresource'");
+            return;
 		}
 		String resJson = new String(Files.readAllBytes(Paths.get(args[2])), StandardCharsets.UTF_8);
 		try(FileInputStream src = new FileInputStream(new File(args[1]))) {
