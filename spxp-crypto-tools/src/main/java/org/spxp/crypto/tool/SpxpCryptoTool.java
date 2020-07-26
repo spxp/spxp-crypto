@@ -3,6 +3,7 @@ package org.spxp.crypto.tool;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -10,11 +11,14 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.spxp.crypto.SpxpCryptoException;
 import org.spxp.crypto.SpxpCryptoNoSuchKeyException;
 import org.spxp.crypto.SpxpCryptoToolsV03;
 import org.spxp.crypto.SpxpCryptoToolsV03.KeyIdSize;
@@ -39,12 +43,14 @@ public class SpxpCryptoTool {
 		}
 		if(args[0].equals("genkeypair")) {
 			genkeypair(args);
+        } else if(args[0].equals("extractpublic")) {
+            extractpublic(args);
 		} else if(args[0].equals("sign")) {
 			sign(args);
-		} else if(args[0].equals("extractpublic")) {
-			extractpublic(args);
 		} else if(args[0].equals("verify")) {
 			verify(args);
+        } else if(args[0].equals("canonicalize")) {
+            canonicalize(args);
 		} else if(args[0].equals("gensymkey")) {
 			gensymkey(args);
 		} else if(args[0].equals("genroundkey")) {
@@ -83,6 +89,8 @@ public class SpxpCryptoTool {
 		System.out.println("      if certificate chains are accepted, then <requiredGrant>s give a comma separated list of");
 		System.out.println("      grant values that must be authorized from the root <publicKeyFile>");
 		System.out.println("      exits with 0 status code on success and 1 on a broken signature");
+        System.out.println("  canonicalize [-omitSpecial] <jsonFile>");
+        System.out.println("      canonicalizes <jsonFile>. If -omitSpecial is given, the fields \"private\", \"seqts\", \"signature\" are omitted");
 		System.out.println("  gensymkey");
 		System.out.println("      generates a new 256 bit AES key");
 		System.out.println("  genroundkey");
@@ -164,6 +172,33 @@ public class SpxpCryptoTool {
 			System.exit(1);
 		}
 	}
+    
+    public void canonicalize(String[] args) throws Exception {
+        if(args.length < 2 || args.length > 3) {
+            System.out.println("Error: Invalid number of options for command 'canonicalize'");
+            return;
+        }
+        boolean omitSpecial = false;
+        String jsonFileName;
+        if(args.length > 2) {
+            if(args[1].equals("-omitSpecial")) {
+                omitSpecial = true;
+            } else {
+                System.out.println("Error: Invalid parameter");
+                return;
+            }
+            jsonFileName = args[2];
+        } else {
+            jsonFileName = args[1];
+        }
+        JSONObject inputObject = new JSONObject(new String(Files.readAllBytes(Paths.get(jsonFileName)), StandardCharsets.UTF_8));
+        try {
+            Set<String> omitMembers = omitSpecial ? SpxpCryptoToolsV03.OMIT_MEMBERS_VERIFY : null;
+            System.out.println(SpxpCryptoToolsV03.canonicalize(inputObject, omitMembers));
+        } catch (JSONException | IOException e) {
+            throw new SpxpCryptoException("Error canonicalizing object", e);
+        }
+    }
 	
 	public void gensymkey(String[] args) throws Exception {
 		if(args.length != 1) {

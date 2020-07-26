@@ -57,9 +57,9 @@ public class SpxpCryptoToolsV03 {
 	
 	private static Decoder urlDecoder = Base64.getUrlDecoder();
 	
-	private static HashSet<String> OMIT_MEMBERS_SIGN = new HashSet<String>(Arrays.asList(new String[] {"private", "seqts"}));
+	public static HashSet<String> OMIT_MEMBERS_SIGN = new HashSet<String>(Arrays.asList(new String[] {"private", "seqts"}));
 	
-	private static HashSet<String> OMIT_MEMBERS_VERIFY = new HashSet<String>(Arrays.asList(new String[] {"private", "seqts", "signature"}));
+	public static HashSet<String> OMIT_MEMBERS_VERIFY = new HashSet<String>(Arrays.asList(new String[] {"private", "seqts", "signature"}));
 
 	private SpxpCryptoToolsV03() {
 		// prevent instantiation
