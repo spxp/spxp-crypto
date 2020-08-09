@@ -18,6 +18,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.spxp.crypto.SpxpConnectKeyPair;
 import org.spxp.crypto.SpxpCryptoException;
 import org.spxp.crypto.SpxpCryptoNoSuchKeyException;
 import org.spxp.crypto.SpxpCryptoToolsV03;
@@ -41,10 +42,10 @@ public class SpxpCryptoTool {
 			usage();
 			return;
 		}
-		if(args[0].equals("genkeypair")) {
-			genkeypair(args);
-        } else if(args[0].equals("extractpublic")) {
-            extractpublic(args);
+		if(args[0].equals("genprofilekeypair")) {
+			genprofilekeypair(args);
+        } else if(args[0].equals("extractprofilepublic")) {
+            extractprofilepublic(args);
 		} else if(args[0].equals("sign")) {
 			sign(args);
 		} else if(args[0].equals("verify")) {
@@ -67,6 +68,10 @@ public class SpxpCryptoTool {
 			encryptresource(args);
 		} else if(args[0].equals("decryptresource")) {
 			decryptresource(args);
+        } else if(args[0].equals("genconnectkeypair")) {
+            genconnectkeypair(args);
+        } else if(args[0].equals("extractconnectpublic")) {
+            extractconnectpublic(args);
 		} else if(args[0].equals("help")) {
 			usage();
 		} else {
@@ -78,10 +83,10 @@ public class SpxpCryptoTool {
 		System.out.println("SPXP Crypto Tool V 0.3");
 		System.out.println("Usage: SpxpCryptoTool <command> [<option>*]");
 		System.out.println("Commands:");
-		System.out.println("  genkeypair");
+		System.out.println("  genprofilekeypair");
 		System.out.println("      generates a new profile keypair");
-		System.out.println("  extractpublic <keyPairFile>");
-		System.out.println("      extracts just the public key part from the keypair stored in <keyPairFile>");
+		System.out.println("  extractprofilepublic <keyPairFile>");
+		System.out.println("      extracts just the public key part from the profile keypair stored in <keyPairFile>");
 		System.out.println("  sign <jsonFileToSign> <keyPairFile>");
 		System.out.println("      signs the json object in <jsonFileToSign> with the secret key stored in <keyPairFile>");
 		System.out.println("  verify <signedJsonFile> <publicKeyFile> [<requiredGrant>[,<requiredGrant>]*]");
@@ -111,15 +116,19 @@ public class SpxpCryptoTool {
 		System.out.println("  decryptresource <inputFile> <decryptionKeyFile> <outputFile>");
 		System.out.println("      decrypts the binary data in <inputFile> with the key described in <decryptionKeyFile> and writes");
 		System.out.println("      the decrypted data to <outputFile>");
+        System.out.println("  genconnectkeypair");
+        System.out.println("      generates a new connect keypair");
+        System.out.println("  extractconnectpublic <keyPairFile>");
+        System.out.println("      extracts just the public key part from the connect keypair stored in <keyPairFile>");
 		System.out.println("  help");
 		System.out.println("      print this screen");
 		System.out.println();
 		System.out.println("Find a detailed decription on https://github.com/spxp/spxp-crypto/spxp-crypto-tool/README.md");
 	}
 	
-	public void genkeypair(String[] args) throws Exception {
+	public void genprofilekeypair(String[] args) throws Exception {
 		if(args.length != 1) {
-			System.out.println("Error: Command 'genkeypair' does not take any options");
+			System.out.println("Error: Command 'genprofilekeypair' does not take any options");
 			return;
 		}
 		SpxpProfileKeyPair keypair = SpxpCryptoToolsV03.generateProfileKeyPair();
@@ -128,9 +137,9 @@ public class SpxpCryptoTool {
 		}
 	}
 	
-	public void extractpublic(String[] args) throws Exception {
+	public void extractprofilepublic(String[] args) throws Exception {
 		if(args.length != 2) {
-			System.out.println("Error: Invalid number of options for command 'extractpublic'");
+			System.out.println("Error: Invalid number of options for command 'extractprofilepublic'");
             return;
 		}
 		JSONObject keypairJwkObj = new JSONObject(new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
@@ -327,5 +336,29 @@ public class SpxpCryptoTool {
 			}
 		}
 	}
+    
+    public void genconnectkeypair(String[] args) throws Exception {
+        if(args.length != 1) {
+            System.out.println("Error: Command 'genconnectkeypair' does not take any options");
+            return;
+        }
+        SpxpConnectKeyPair keypair = SpxpCryptoToolsV03.generateConnectKeyPair();
+        try(PrintWriter writer = new PrintWriter(System.out)) {
+            SpxpCryptoToolsV03.getKeypairJWK(keypair).write(writer, 4, 0);
+        }
+    }
+    
+    public void extractconnectpublic(String[] args) throws Exception {
+        if(args.length != 2) {
+            System.out.println("Error: Invalid number of options for command 'extractconnectpublic'");
+            return;
+        }
+        JSONObject keypairJwkObj = new JSONObject(new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
+        SpxpConnectKeyPair keypair = SpxpCryptoToolsV03.getConnectKeyPair(keypairJwkObj);
+        JSONObject publicJwk = SpxpCryptoToolsV03.getPublicJWK(keypair);
+        try(PrintWriter writer = new PrintWriter(System.out)) {
+            publicJwk.write(writer, 4, 0);
+        }
+    }
 
 }

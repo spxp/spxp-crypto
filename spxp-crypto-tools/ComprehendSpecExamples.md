@@ -13,45 +13,45 @@ against insignificant whitespace, character encoding and the ordering of members
 ## Used Profile Keypairs and Symmetric Keys
 The keypairs used for the examples are listed in [Appendix A](https://github.com/spxp/spxp-specs/blob/master/SpxpProfileSpec-V03.md#appendix-a-private-keys-used-in-examples)
 of the spec. You can find these keypairs as json files here:  
-[Profile keypair of “Crypto Alice”](./spec-examples/alice-keypair.json)  
-[Profile keypair of “Crypto Bob”](./spec-examples/bob-keypair.json)  
+[Profile keypair of “Crypto Alice”](./spec-examples/alice-profile-keypair.json)  
+[Profile keypair of “Crypto Bob”](./spec-examples/bob-profile-keypair.json)  
 [Symmetric AES key “ABCD.1234” used in chapter 10.1](./spec-examples/symkey-ABCD1234.json)
 
 ## Signed Profile of “Crypto Alice” in Chapter 7.1
 You can sign this profile yourself as follows:
 ```
-$ SpxpCryptoTool sign ./spec-examples/alice-short-profile-unsigned.json ./spec-examples/alice-keypair.json
+$ SpxpCryptoTool sign ./spec-examples/alice-short-profile-unsigned.json ./spec-examples/alice-profile-keypair.json
 ```
 And to verify the signature:
 ```
-$ SpxpCryptoTool verify ./spec-examples/alice-short-profile-signed.json ./spec-examples/alice-keypair.json
+$ SpxpCryptoTool verify ./spec-examples/alice-short-profile-signed.json ./spec-examples/alice-profile-keypair.json
 ```
 
 ## Certificate for “Crypto Bob” signed by “Crypto Alice” in Chapter 7.2
 You can sign this certificate yourself as follows:
 ```
-$ SpxpCryptoTool sign ./spec-examples/bob-cert-unsigned.json ./spec-examples/alice-keypair.json
+$ SpxpCryptoTool sign ./spec-examples/bob-cert-unsigned.json ./spec-examples/alice-profile-keypair.json
 ```
 And to verify the signature:
 ```
-$ SpxpCryptoTool verify ./spec-examples/bob-cert-signed.json ./spec-examples/alice-keypair.json
+$ SpxpCryptoTool verify ./spec-examples/bob-cert-signed.json ./spec-examples/alice-profile-keypair.json
 ```
 
 ## Individual Posts in Chapter 9
 As [specified in 9.1](https://github.com/spxp/spxp-specs/blob/master/SpxpProfileSpec-V03.md#91-signing-and-encrypting-posts),
 posts are signed individually. Each post in the example in chapter 9 can be signed as follows:
 ```
-$ SpxpCryptoTool sign ./spec-examples/alice-post1-unsigned.json ./spec-examples/alice-keypair.json
-$ SpxpCryptoTool sign ./spec-examples/alice-post2-unsigned.json ./spec-examples/alice-keypair.json
-$ SpxpCryptoTool sign ./spec-examples/alice-post3-unsigned.json ./spec-examples/bob-keypair.json
+$ SpxpCryptoTool sign ./spec-examples/alice-post1-unsigned.json ./spec-examples/alice-profile-keypair.json
+$ SpxpCryptoTool sign ./spec-examples/alice-post2-unsigned.json ./spec-examples/alice-profile-keypair.json
+$ SpxpCryptoTool sign ./spec-examples/alice-post3-unsigned.json ./spec-examples/bob-profile-keypair.json
 ```
 Please note that post 3 is signed by Bob. You need to later replace the String member `key` in
 this signature with Bob's certificate.  
 To verify these signatures:
 ```
-$ SpxpCryptoTool verify ./spec-examples/alice-post1-signed.json ./spec-examples/alice-keypair.json post
-$ SpxpCryptoTool verify ./spec-examples/alice-post2-signed.json ./spec-examples/alice-keypair.json post
-$ SpxpCryptoTool verify ./spec-examples/alice-post3-signed.json ./spec-examples/alice-keypair.json post
+$ SpxpCryptoTool verify ./spec-examples/alice-post1-signed.json ./spec-examples/alice-profile-keypair.json post
+$ SpxpCryptoTool verify ./spec-examples/alice-post2-signed.json ./spec-examples/alice-profile-keypair.json post
+$ SpxpCryptoTool verify ./spec-examples/alice-post3-signed.json ./spec-examples/alice-profile-keypair.json post
 ```
 Please note that we verify post 3 also against Alice's signature instead of Bob's.
 The additional parameter `post` tells the verification tool to also accept
@@ -68,7 +68,7 @@ First, we have prepared a small json object that only contains the website [here
 ```
 This object then needs to be signed:
 ```
-$ SpxpCryptoTool sign ./spec-examples/alice-privatewebsite-unsigned.json ./spec-examples/alice-keypair.json
+$ SpxpCryptoTool sign ./spec-examples/alice-privatewebsite-unsigned.json ./spec-examples/alice-profile-keypair.json
 ```
 resulting in
 ```json
@@ -105,7 +105,7 @@ This object is then embedded into the profile root object:
 ```
 And then the entire profile root object gets signed:
 ```
-$ SpxpCryptoTool sign ./spec-examples/alice-private-profile-unsigned.json ./spec-examples/alice-keypair.json
+$ SpxpCryptoTool sign ./spec-examples/alice-private-profile-unsigned.json ./spec-examples/alice-profile-keypair.json
 ```
 Resulting in
 ```json
@@ -132,7 +132,7 @@ Resulting in
 ```
 To verify this entire profile root object:
 ```
-$ SpxpCryptoTool verify ./spec-examples/alice-private-profile-signed.json ./spec-examples/alice-keypair.json
+$ SpxpCryptoTool verify ./spec-examples/alice-private-profile-signed.json ./spec-examples/alice-profile-keypair.json
 Signature valid.
 ```
 You can remove the `private` array here or add additional entries and check that
@@ -150,6 +150,6 @@ $ SpxpCryptoTool decryptsymcompact ./spec-examples/alice-privatewebsite-encrypte
 ```
 Remember to check the signature of this fragment before merging it into the profile:
 ```
-$ SpxpCryptoTool verify ./spec-examples/alice-privatewebsite-signed-condensed.json ./spec-examples/alice-keypair.json
+$ SpxpCryptoTool verify ./spec-examples/alice-privatewebsite-signed-condensed.json ./spec-examples/alice-profile-keypair.json
 Signature valid.
 ```

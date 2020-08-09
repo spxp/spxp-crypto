@@ -20,11 +20,11 @@ So as first step, we will create a new KeyPair for our profile. We use the
 tool prints the results to standard out, we pipe the result to a file. To create
 your KeyPair, run this command:
 ```
-$ SpxpCryptoTool createkeypair > john-doe-keypair.json
+$ SpxpCryptoTool genprofilekeypair > john-doe-profile-keypair.json
 ```
 We can then take a look at your profile KeyPair:
 ```
-$ cat john-doe-keypair.json
+$ cat john-doe-profile-keypair.json
 {
     "kty": "OKP",
     "d": "cimnMK-C7_RERO2c9IyY9Ch4lGkvROPz7ohAbQVR7W8",
@@ -41,8 +41,8 @@ on, we will just need the public key to include it in our new profile. You can
 now simply copy this file and remove your private key `d` in this copy. Or you
 can use the `SpxpCryptoTool` for this operation as well:
 ```
-$ SpxpCryptoTool extractpublic john-doe-keypair.json > john-doe-publickey.json
-$ cat john-doe-publickey.json
+$ SpxpCryptoTool extractprofilepublic john-doe-profile-keypair.json > john-doe-profile-publickey.json
+$ cat john-doe-profile-publickey.json
 {
     "kty": "OKP",
     "crv": "Ed25519",
@@ -94,7 +94,7 @@ For example:
 When you are happy with your profile, we need to sign it before it can be
 published. We use again the `SpxpCryptoTool` for this operation:
 ```
-$ SpxpCryptoTool sign john-doe-profile-unsigned.json john-doe-keypair.json > john-doe-1.json
+$ SpxpCryptoTool sign john-doe-profile-unsigned.json john-doe-profile-keypair.json > john-doe-1.json
 ```
 And you successfully created your first profile!
 ```json
@@ -161,7 +161,7 @@ and add a list of social profile URIs you want to expose publicly as your
 ```
 As any information published via SPXP, it then has to be signed:
 ```
-$ SpxpCryptoTool sign john-doe-friends-unsigned.json john-doe-keypair.json > john-doe-friends.json
+$ SpxpCryptoTool sign john-doe-friends-unsigned.json john-doe-profile-keypair.json > john-doe-friends.json
 ```
 resulting in
 ```json
@@ -204,7 +204,7 @@ the entire absolute URI, or a reference relative to the profile root URI. We
 decide for the latter option and use the plain filename.  
 After having modified this file, we need to sign it again:
 ```
-$ SpxpCryptoTool sign john-doe-profile-unsigned.json john-doe-keypair.json > john-doe-2.json
+$ SpxpCryptoTool sign john-doe-profile-unsigned.json john-doe-profile-keypair.json > john-doe-2.json
 ```
 To publish your changes, simply upload both files to your webserver. Check your
 profile again in your SPXP client. Keep in mind that most clients do not refresh
@@ -231,7 +231,7 @@ The format of the timestamp in `seqts` is year-month-day, plus the character
 `T` and then the time in 24h format including milliseconds. This timestamp is
 always in UTC. This post then needs to be signed:
 ```
-$ SpxpCryptoTool sign john-doe-post1-unsigned.json john-doe-keypair.json > john-doe-post1-signed.json
+$ SpxpCryptoTool sign john-doe-post1-unsigned.json john-doe-profile-keypair.json > john-doe-post1-signed.json
 ```
 And we can create a second post, this time with a picture:
 ```
@@ -249,7 +249,7 @@ and add this information:
 ```
 ...and sign it...
 ```
-$ SpxpCryptoTool sign john-doe-post2-unsigned.json john-doe-keypair.json > john-doe-post2-signed.json
+$ SpxpCryptoTool sign john-doe-post2-unsigned.json john-doe-profile-keypair.json > john-doe-post2-signed.json
 ```
 Both posts are then combined in one single file:
 ```
@@ -334,7 +334,7 @@ object that only contains this additional information:
 ```
 This file then needs to be signed:
 ```
-$ SpxpCryptoTool sign john-doe-dob-unsigned.json john-doe-keypair.json > john-doe-dob-signed.json
+$ SpxpCryptoTool sign john-doe-dob-unsigned.json john-doe-profile-keypair.json > john-doe-dob-signed.json
 ```
 And then we can encrypt the signed file with the symmetric key:
 ```
@@ -405,7 +405,7 @@ that only contains our email address:
 ```
 And sign it:
 ```
-$ SpxpCryptoTool sign john-doe-email-unsigned.json john-doe-keypair.json > john-doe-email-signed.json
+$ SpxpCryptoTool sign john-doe-email-unsigned.json john-doe-profile-keypair.json > john-doe-email-signed.json
 ```
 But this time, we want both keys, the one for our friends and the one for our
 work colleagues, to be able to decrypt our email address. This is only possible
@@ -551,7 +551,7 @@ We add all post members, except for `seqts`:
 ```
 then sign it:
 ```
-$ SpxpCryptoTool sign john-doe-post3-private-unsigned.json john-doe-keypair.json > john-doe-post3-private-signed.json
+$ SpxpCryptoTool sign john-doe-post3-private-unsigned.json john-doe-profile-keypair.json > john-doe-post3-private-signed.json
 ```
 And encrypt it for our close friends:
 ```

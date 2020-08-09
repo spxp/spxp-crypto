@@ -20,13 +20,13 @@ This tool can be used to
 ## Command Reference
 This tool provides these commands:
 
-`$ SpxpCryptoTool genkeypair`  
+`$ SpxpCryptoTool genprofilekeypair`  
 Generates a new profile keypair and prints it as JWK object to standard out.
 
-`$ SpxpCryptoTool extractpublic <keyPairFile>`  
-Extracts just the public key part from the keypair stored in `<keyPairFile>`
-and prints it as JWK object to standard out. The file `<keyPairFile>` remains
-unchanged.
+`$ SpxpCryptoTool extractprofilepublic <keyPairFile>`  
+Extracts just the public key part from the profile keypair stored in
+`<keyPairFile>` and prints it as JWK object to standard out. The file
+`<keyPairFile>` remains unchanged.
 
 `$ SpxpCryptoTool sign <jsonFileToSign> <keyPairFile>`  
 Signs the JSON object in the file `<jsonFileToSign>` with the secret key stored
@@ -88,6 +88,14 @@ object.
 Decrypts the binary data in `<inputFile>` with the key described by the
 resource object in `<decryptionKeyFile>` and writes the decrypted binary data
 to `<outputFile>`.
+
+`$ SpxpCryptoTool genconnectkeypair`  
+Generates a new connect keypair and prints it as JWK object to standard out.
+
+`$ SpxpCryptoTool extractconnectpublic <keyPairFile>`  
+Extracts just the public key part from the connect keypair stored in
+`<keyPairFile>` and prints it as JWK object to standard out. The file
+`<keyPairFile>` remains unchanged.
 
 `$ SpxpCryptoTool help`  
 Prints a help screen.

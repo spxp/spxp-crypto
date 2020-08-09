@@ -484,6 +484,14 @@ public class SpxpCryptoToolsV03 {
         org.bouncycastle.math.ec.rfc8032.Ed25519.generatePublicKey(secretKey, 0, publicKey, 0);
         return new SpxpProfileKeyPair(generateRandomKeyId(KeyIdSize.LONG), secretKey, publicKey);
 	}
+    
+    public static SpxpConnectKeyPair generateConnectKeyPair() {
+        byte[] publicKey = new byte[org.bouncycastle.math.ec.rfc8032.Ed25519.PUBLIC_KEY_SIZE];
+        byte[] secretKey = new byte[org.bouncycastle.math.ec.rfc8032.Ed25519.SECRET_KEY_SIZE];
+        org.bouncycastle.math.ec.rfc7748.X25519.generatePrivateKey(secureRandom, secretKey);
+        org.bouncycastle.math.ec.rfc7748.X25519.generatePublicKey(secretKey, 0, publicKey, 0);
+        return new SpxpConnectKeyPair(generateRandomKeyId(KeyIdSize.LONG), secretKey, publicKey);
+    }
 	
 	public static void signObject(JSONObject value, SpxpProfileKeyPair profileKeyPair) throws SpxpCryptoException {
 		if(value.has("signature")) {
@@ -726,6 +734,25 @@ public class SpxpCryptoToolsV03 {
 		jwkObj.put("k", encodeBase64Url(keySpec.getSymmetricKey()));
 		return jwkObj;
 	}
+    
+    public static JSONObject getKeypairJWK(SpxpConnectKeyPair keyPair) {
+        JSONObject jwkObj = new JSONObject();
+        jwkObj.put("kid", keyPair.getKeyId());
+        jwkObj.put("kty", "OKP");
+        jwkObj.put("crv", "X25519");
+        jwkObj.put("x", encodeBase64Url(keyPair.getPublicKey()));
+        jwkObj.put("d", encodeBase64Url(keyPair.getSecretKey()));
+        return jwkObj;
+    }
+    
+    public static JSONObject getPublicJWK(SpxpConnectKeyPair keyPair) {
+        JSONObject jwkObj = new JSONObject();
+        jwkObj.put("kid", keyPair.getKeyId());
+        jwkObj.put("kty", "OKP");
+        jwkObj.put("crv", "X25519");
+        jwkObj.put("x", encodeBase64Url(keyPair.getPublicKey()));
+        return jwkObj;
+    }
 	
 	public static SpxpProfileKeyPair getProfileKeyPair(JSONObject jwk) throws SpxpCryptoException {
 		try {
@@ -781,5 +808,42 @@ public class SpxpCryptoToolsV03 {
 			throw new SpxpCryptoException("Invalid symmetric key", e);
 		}
 	}
+    
+    public static SpxpConnectKeyPair getConnectKeyPair(JSONObject jwk) throws SpxpCryptoException {
+        try {
+            String kid = jwk.getString("kid");
+            String kty = jwk.getString("kty");
+            if(!kty.equals("OKP")) {
+                throw new SpxpCryptoException("Invalid key type. Expected OKP");
+            }
+            String crv = jwk.getString("crv");
+            if(!crv.equals("X25519")) {
+                throw new SpxpCryptoException("Invalid curve. Expected Ed25519");
+            }
+            byte[] x = decodeBase64Url(jwk.getString("x"));
+            byte[] d = decodeBase64Url(jwk.getString("d"));
+            return new SpxpConnectKeyPair(kid, d, x);
+        } catch(IllegalArgumentException | JSONException e) {
+            throw new SpxpCryptoException("Invalid keypair", e);
+        }
+    }
+    
+    public static SpxpConnectPublicKey getConnectPublicKey(JSONObject jwk) throws SpxpCryptoException {
+        try {
+            String kid = jwk.getString("kid");
+            String kty = jwk.getString("kty");
+            if(!kty.equals("OKP")) {
+                throw new SpxpCryptoException("Invalid key type. Expected OKP");
+            }
+            String crv = jwk.getString("crv");
+            if(!crv.equals("X25519")) {
+                throw new SpxpCryptoException("Invalid curve. Expected Ed25519");
+            }
+            byte[] x = decodeBase64Url(jwk.getString("x"));
+            return new SpxpConnectPublicKey(kid, x);
+        } catch(IllegalArgumentException | JSONException e) {
+            throw new SpxpCryptoException("Invalid public key", e);
+        }
+    }
 
 }
