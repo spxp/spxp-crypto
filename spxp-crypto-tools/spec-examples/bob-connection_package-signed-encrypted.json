@@ -1,0 +1,15 @@
+{
+    "protected": "eyJlbmMiOiJBMjU2R0NNIn0",
+    "unprotected": {"alg": "A256GCMKW"},
+    "recipients": [{
+        "encrypted_key": "6IwyDn2vjPer0_IgHE0-Cm9LHXJ8QN94jyRW8nWOaHU",
+        "header": {
+            "kid": "T7n_19BqWjU17l1s",
+            "tag": "nerisQuz4dMolZ-TXfj7pw",
+            "iv": "VCn9f30Ho3RvsEN-"
+        }
+    }],
+    "iv": "12S6KY0NpAHPrWjk",
+    "ciphertext": "YFUmyjxYhQ-TnQa_-g1k1d0w8N_mrDxsT6orOX0zSxFvOrDVYTIPFyOOSoErFlsgMEch6yNMxfrw1Umz5SVhaNPxfx8u4dPNlrrdUagDs1HTl67iP52rmA9gvqKmIZPVP8KHbQvXIKZndHAr2FrdMC3HUz4stMEmDdBZn4ItLkgeVDy6oRU4AFlY73_mX9xApqb7G-qpr1BufW0F2U-3WmbnyRBCGhR1h6OscvlAKZoZmDT55h6qvRiZPLlurIF9r9i8aZEi0slCuujeBTqXEsCSzaj__9Wqq4-HcKxDga14iba9EH_B3AtMKpw2XR6QG25_r0hCg3l_qFjVsA4Mq-7-eXeYos6I0ChpBiltJe2CJq-6RDmw_wadjxw_jfmWT87TCRmufeIFU7dsCnxuO1hikjcbSwK-fmrjhq9uyEPWDe2VtTteYyJuRO5-02H3rBg_LsYeHOvTmqe0zq0U5iRttsfjW2b-tqh3yV4i36MiAyPY0PHSw7yi12pji1U1CfNFd00qguvPfjzPLRq553XstRBESZJTjlWY2CeNFFeVo0vjE9kvBDV_Vy98fOCW-w",
+    "tag": "KuCJeGQwcHsgJ1g2gb8ZCA"
+}

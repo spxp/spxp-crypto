@@ -1,0 +1,28 @@
+{
+    "type" : "connection_package",
+    "ver" : "0.3",
+    "establishId" : "K4dwfD4wA67xaD-t",
+    "readerKey" : {
+        "kid" : "ABCD.1234",
+        "kty" : "oct",
+        "alg" : "A256GCM",
+        "k" : "Dl3fyz_0lHaSeFl-TJxSTr2NET5H6t2SELmI5tiCFno"
+    },
+    "publishingCertificate" : {
+        "publicKey" : {
+            "kid" : "czlHMPEJcLb7jMUI",
+            "kty" : "OKP",
+            "crv" : "Ed25519",
+            "x" : "vg42ogNHigJnwZ0pwwMzUtaXZA49eqcfGYl2u9GR8vg"
+        },
+        "grant" : [ "post" ],
+        "signature" : {
+            "key" : "C8xSIBPKRTcXxFix",
+            "sig" : "PEekh7oCLQa0O4rCUPrH19yCJCLtEZfnumUlPrH0TPbq66Bj_aO71enf-P6gUttlgJFRRfvD1D7wAAYZaX6PCQ"
+        }
+    },
+    "signature": {
+        "sig": "KwkZSI9hZQOxZbzlXviDvSL6ez2qJfimPLiP4vvFIOqgTqArimMagLuqYK8NM5F7BLRG5C_zp1VoExrU6Ps0DQ",
+        "key": "C8xSIBPKRTcXxFix"
+    }
+}

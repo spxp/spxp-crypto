@@ -63,7 +63,7 @@ result to standard out.
 Prints the key id (kid) of the required key if no `<symmetricKey>` parameter is
 given.
 
-`$ SpxpCryptoTool encryptsymjson <fileToEncrypt> [<symmetricKey>[,<symmetricKey>]*]`  
+`$ SpxpCryptoTool encryptsymjson <fileToEncrypt> <symmetricKey>[,<symmetricKey>]*`  
 Encrypts `<fileToEncrypt>` with multiple 256 bit AES keys each read as JWK from
 a file in the comma separated list of `<symmetricKey>`s and prints the result
 as JWE object in JSON serialization to standard out. Each of the given
@@ -86,8 +86,8 @@ object.
 
 `$ SpxpCryptoTool decryptresource <inputFile> <decryptionKeyFile> <outputFile>`  
 Decrypts the binary data in `<inputFile>` with the key described by the
-resource object in `<decryptionKeyFile>` and writes the decrypted binary data
-to `<outputFile>`.
+symmetric JWK object in `<decryptionKeyFile>` and writes the decrypted binary
+data to `<outputFile>`.
 
 `$ SpxpCryptoTool genconnectkeypair`  
 Generates a new connect keypair and prints it as JWK object to standard out.
@@ -96,6 +96,17 @@ Generates a new connect keypair and prints it as JWK object to standard out.
 Extracts just the public key part from the connect keypair stored in
 `<keyPairFile>` and prints it as JWK object to standard out. The file
 `<keyPairFile>` remains unchanged.
+
+`$ SpxpCryptoTool encryptasymjson <fileToEncrypt> <publicKeyFile>`
+Encrypts `<fileToEncrypt>` with the public key of the connect keypair stored as
+JWK in `<publicKeyFile>` and prints the result as JWE object in JSON
+serialization to standard out.  
+Note: Can only be used on text files in UTF-8 encoding.
+
+`$ SpxpCryptoTool decryptsymjson <fileToDecrypt> <keyPairFile>`
+Decrypts the JWE object in JSON serialization stored in `<fileToDecrypt>` with
+the private key of the connect keypair stored as JWK in `<keyPairFile>` and
+prints the result to standard out.
 
 `$ SpxpCryptoTool help`  
 Prints a help screen.

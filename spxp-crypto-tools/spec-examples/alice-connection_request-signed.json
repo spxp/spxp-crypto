@@ -1,0 +1,39 @@
+{
+    "type" : "connection_request",
+    "ver" : "0.3",
+    "timestamp" : "2020-01-12T09:40:17.734",
+    "expires" : "2020-07-12T09:40:17.734",
+    "establishId" : "K4dwfD4wA67xaD-t",
+    "requester" : {
+        "uri" : "https://example.com/spxp/alice",
+        "publicKey" : {
+            "kid" : "C8xSIBPKRTcXxFix",
+            "kty" : "OKP",
+            "crv" : "Ed25519",
+            "x" : "skpRppgAopeYo9MWRdExl26rGA_z701tMoiuJ-jIjU8"
+        }
+    },
+    "requestee" : {
+        "uri" : "https://example.com/spxp/bob",
+        "publicKey" : {
+            "kid" : "czlHMPEJcLb7jMUI",
+            "kty" : "OKP",
+            "crv" : "Ed25519",
+            "x" : "vg42ogNHigJnwZ0pwwMzUtaXZA49eqcfGYl2u9GR8vg"
+        }
+    },
+    "offering" : [
+        "read",
+        "publish"
+    ],
+    "establishKey" : {
+        "kid": "T7n_19BqWjU17l1s",
+        "kty": "oct",
+        "alg": "A256GCM",
+        "k": "AnkrwD_Et1E0-FB0XYU38hpmdEGr0LOBO8O2HRdzgOw"
+    },
+    "signature": {
+        "sig": "vzKvMxXl0JGIDFEqiPv2rMokMCW-f3DR1nTi-pFebddvBIDGChSsUttsiPP5wFLzTvyNW6NEcDSCfbNKz5qeDw",
+        "key": "C8xSIBPKRTcXxFix"
+    }
+}

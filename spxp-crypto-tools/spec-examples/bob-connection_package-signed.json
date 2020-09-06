@@ -1,0 +1,15 @@
+{
+    "type" : "connection_package",
+    "ver" : "0.3",
+    "establishId" : "K4dwfD4wA67xaD-t",
+    "readerKey" : {
+        "kid": "54WHdcNfoUYCPnmZ",
+        "kty" : "oct",
+        "alg" : "A256GCM",
+        "k" : "93xFdkxhq3ipYLkszBlo0yTxWood1C5wqeSgRJ-1-Mk"
+    },
+    "signature": {
+        "sig": "Ihyn3NLvQvuOkRO2EiI5dfQ2nCG9xKQ0yeBp_4SVqlO3tKruMHZUEntp80KvFxoImL0UcfVMfuZXFm-5NkFUBQ",
+        "key": "czlHMPEJcLb7jMUI"
+    }
+}

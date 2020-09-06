@@ -6,9 +6,11 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigDecimal;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
@@ -330,7 +332,6 @@ public class SpxpCryptoToolsV03 {
 			// calculate additional authentication data
 			byte[] aad = calculateAAD(protectedHeadersJson, customAAD);
 	    	// algo spec
-			
 			AlgorithmParameterSpec algoSpec = new GCMParameterSpec(A256GCM_AUTH_TAG_LENGTH, iv);
 			// reconstruct encrypted content as used by java
 	        byte[] encryptedContentWithTag = new byte[cipher.length + authTag.length];
@@ -447,6 +448,131 @@ public class SpxpCryptoToolsV03 {
 			throw new SpxpCryptoException(e);
 		}
 	}
+    
+    public static String encryptAsymmetricJson(String payload, SpxpConnectPublicKey recipientKey /*, String aad*/) throws SpxpCryptoException
+    {
+        try
+        {
+            // handle aad
+            byte[] customAAD = null; //aad != null ? aad.getBytes(StandardCharsets.UTF_8) : null;
+            // generate ephemeral keypair
+            SpxpConnectKeyPair ephemeralKeypair = generateConnectKeyPair();
+            // calculate CEK
+            byte[] z = calculateECDHKeyAgreement(ephemeralKeypair, recipientKey);
+            byte[] cekBytes = calculateJweDerivedKey(z, "A256GCM", (new byte[0]), (new byte[0]), 256);
+            SecretKey cek = new SecretKeySpec(cekBytes, AES_JCE_KEY_SPEC);
+            // create random IV
+            byte[] iv = new byte[A256GCM_IV_SIZE / 8];
+            secureRandom.nextBytes(iv);
+            // algo spec
+            AlgorithmParameterSpec algoSpec = new GCMParameterSpec(A256GCM_AUTH_TAG_LENGTH, iv);
+            // protected headers
+            String protectedHeadersJson = "{\"enc\":\"A256GCM\"}";
+            // calculate additional authentication data
+            byte[] combinedAAD  = calculateAAD(protectedHeadersJson, customAAD);
+            // init Cipher
+            int mode = Cipher.ENCRYPT_MODE;
+            Cipher c = Cipher.getInstance(A256GCM_JCE_ALGO_SPEC);
+            c.init(mode, cek, algoSpec);
+            c.updateAAD(combinedAAD);
+            // encrypt
+            byte[] encryptedContent = c.doFinal(payload.getBytes(StandardCharsets.UTF_8));
+            byte[] cipher = Arrays.copyOf(encryptedContent, encryptedContent.length - A256GCM_AUTH_TAG_LENGTH / 8);
+            byte[] authTag = Arrays.copyOfRange(encryptedContent, encryptedContent.length - A256GCM_AUTH_TAG_LENGTH / 8, encryptedContent.length);
+            // prepare JSON JWE result
+            JSONObject result = new JSONObject();
+            result.putOnce("ciphertext", encodeBase64Url(cipher));
+            result.putOnce("protected", encodeBase64Url(protectedHeadersJson.getBytes(StandardCharsets.UTF_8)));
+            /*if(customAAD != null &&  customAAD.length > 0)
+            {
+                result.putOnce("aad", encodeBase64Url(customAAD));
+            }*/
+            JSONObject unprotectedHeader = new JSONObject();
+            unprotectedHeader.putOnce("alg", "ECDH-ES");
+            result.putOnce("unprotected", unprotectedHeader);
+            result.putOnce("tag", encodeBase64Url(authTag));
+            result.putOnce("iv", encodeBase64Url(iv));
+            JSONObject recipientHeader = new JSONObject();
+            recipientHeader.putOnce("kid", recipientKey.getKeyId());
+            recipientHeader.putOnce("epk", getPublicJWK(ephemeralKeypair));
+            JSONObject recipientObject = new JSONObject();
+            recipientObject.putOnce("header", recipientHeader);
+            JSONArray recipients = new JSONArray();
+            recipients.put(recipientObject);
+            result.putOnce("recipients", recipients);
+            return result.toString();
+        }
+        catch(IllegalArgumentException | JSONException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException e)
+        {
+            throw new SpxpCryptoException(e);
+        }
+    }
+    
+    public static String decryptAsymmetricJson(String json, SpxpConnectKeyPair keyPair) throws SpxpCryptoException
+    {
+        try
+        {
+            // decode and check headers
+            JSONObject obj = new JSONObject(json);
+            JSONObject unprotectedHeader = obj.getJSONObject("unprotected");
+            String alg = unprotectedHeader.getString("alg");
+            if(!alg.equals("ECDH-ES")) {
+                throw new SpxpCryptoException("Unsupported algortithm");
+            }
+            String protectedHeadersJson = new String(decodeBase64Url(obj.getString("protected")), StandardCharsets.UTF_8);
+            JSONObject protectedHeader = new JSONObject(protectedHeadersJson);
+            String enc = protectedHeader.getString("enc");
+            if(!enc.equals("A256GCM")) {
+                throw new SpxpCryptoException("Unsupported encoding");
+            }
+            // get epk from recipients
+            JSONArray recipients = obj.getJSONArray("recipients");
+            if(recipients.length() != 1) {
+                throw new SpxpCryptoException("Invalid JWE: ECDH-AS algo supports only exactly one recipient");
+            }
+            JSONObject recipient = recipients.getJSONObject(0);
+            JSONObject recipientHeader = recipient.getJSONObject("header");
+            String kid = recipientHeader.getString("kid");
+            JSONObject epk = recipientHeader.getJSONObject("epk");
+            if(!kid.equals(keyPair.getKeyId())) {
+                throw new SpxpCryptoNoSuchKeyException();
+            }
+            SpxpConnectPublicKey ephemeralPublicKey = getConnectPublicKey(epk);
+            // calculate CEK
+            byte[] z = calculateECDHKeyAgreement(keyPair, ephemeralPublicKey);
+            byte[] cekBytes = calculateJweDerivedKey(z, "A256GCM", (new byte[0]), (new byte[0]), 256);
+            SecretKey cek = new SecretKeySpec(cekBytes, AES_JCE_KEY_SPEC);
+            // decode cryptographic material
+            String customAADEncoded = obj.optString("aad");
+            byte[] customAAD = customAADEncoded==null ? null : decodeBase64Url(customAADEncoded);
+            byte[] iv = decodeBase64Url(obj.getString("iv"));
+            byte[] cipher = decodeBase64Url(obj.getString("ciphertext"));
+            byte[] authTag = decodeBase64Url(obj.getString("tag"));
+            if(iv.length != (A256GCM_IV_SIZE/8) || authTag.length != A256GCM_AUTH_TAG_LENGTH/8) {
+                throw new SpxpCryptoException("Invalid IV or auth tag size");
+            }
+            // calculate additional authentication data
+            byte[] aad = calculateAAD(protectedHeadersJson, customAAD);
+            // algo spec
+            AlgorithmParameterSpec algoSpec = new GCMParameterSpec(A256GCM_AUTH_TAG_LENGTH, iv);
+            // reconstruct encrypted content as used by java
+            byte[] encryptedContentWithTag = new byte[cipher.length + authTag.length];
+            System.arraycopy(cipher, 0, encryptedContentWithTag, 0, cipher.length);
+            System.arraycopy(authTag, 0, encryptedContentWithTag, cipher.length, authTag.length);
+            // decrypt
+            int mode = Cipher.DECRYPT_MODE;
+            Cipher c = Cipher.getInstance(A256GCM_JCE_ALGO_SPEC);
+            c.init(mode, cek, algoSpec);
+            c.updateAAD(aad);
+            byte[] decrypted = c.doFinal(encryptedContentWithTag);
+            // return as String
+            return new String(decrypted, StandardCharsets.UTF_8);
+        }
+        catch(IllegalArgumentException | JSONException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e)
+        {
+            throw new SpxpCryptoException(e);
+        }
+    }
 	
 	public static byte[] generateSymmetricKey(int bitlen)
 	{
@@ -491,6 +617,49 @@ public class SpxpCryptoToolsV03 {
         org.bouncycastle.math.ec.rfc7748.X25519.generatePrivateKey(secureRandom, secretKey);
         org.bouncycastle.math.ec.rfc7748.X25519.generatePublicKey(secretKey, 0, publicKey, 0);
         return new SpxpConnectKeyPair(generateRandomKeyId(KeyIdSize.LONG), secretKey, publicKey);
+    }
+    
+    private static byte[] calculateECDHKeyAgreement(SpxpConnectKeyPair privateKey, SpxpConnectPublicKey publicKey) throws SpxpCryptoException
+    {
+        byte[] secret = new byte[org.bouncycastle.math.ec.rfc7748.X25519.POINT_SIZE];
+        if (!org.bouncycastle.math.ec.rfc7748.X25519.calculateAgreement(privateKey.getSecretKey(), 0, publicKey.getPublicKey(), 0, secret, 0))
+        {
+            throw new SpxpCryptoException("ECDH key agreement failed");
+        }
+        return secret;
+    }
+    
+    private static byte[] calculateJweDerivedKey(byte[] z, String algoName, byte[] apu, byte[] apv, int targetKeyBitLen) throws SpxpCryptoException
+    {
+        if(targetKeyBitLen > 256)
+        {
+            throw new SpxpCryptoException("this implementation only supports derived keys up to 256 bit");
+        }
+        try
+        {
+            byte[] algoNameBytes = algoName.getBytes(StandardCharsets.US_ASCII);
+            ByteBuffer otherInfoBuffer = ByteBuffer.allocate(4 + algoNameBytes.length + 4 + apu.length + 4 + apv.length + 4);
+            otherInfoBuffer.putInt(algoNameBytes.length);
+            otherInfoBuffer.put(algoNameBytes);
+            otherInfoBuffer.putInt(apu.length);
+            otherInfoBuffer.put(apu);
+            otherInfoBuffer.putInt(apv.length);
+            otherInfoBuffer.put(apv);
+            otherInfoBuffer.putInt(targetKeyBitLen);
+            byte[] otherInfo = otherInfoBuffer.array();
+            ByteBuffer concatKdfBuffer = ByteBuffer.allocate(4 + z.length + otherInfo.length);
+            concatKdfBuffer.putInt(1);
+            concatKdfBuffer.put(z);
+            concatKdfBuffer.put(otherInfo);
+            byte[] concatKdf = concatKdfBuffer.array();
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] round1Hash = md.digest(concatKdf);
+            return Arrays.copyOf(round1Hash, targetKeyBitLen / 8);
+        }
+        catch(Exception e)
+        {
+            throw new SpxpCryptoException(e);
+        }
     }
 	
 	public static void signObject(JSONObject value, SpxpProfileKeyPair profileKeyPair) throws SpxpCryptoException {

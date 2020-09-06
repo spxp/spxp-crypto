@@ -15,9 +15,12 @@ The keypairs used for the examples are listed in [Appendix A](https://github.com
 of the spec. You can find these keypairs as json files here:  
 [Profile keypair of “Crypto Alice”](./spec-examples/alice-profile-keypair.json)  
 [Profile keypair of “Crypto Bob”](./spec-examples/bob-profile-keypair.json)  
-[Symmetric AES key “ABCD.1234” used in chapter 10.1](./spec-examples/symkey-ABCD1234.json)
+[Symmetric AES key “ABCD.1234” used in chapter 10.1](./spec-examples/symkey-ABCD1234.json)  
+[Connect keypair of “Crypto Alice”](./spec-examples/alice-connect-keypair.json)  
+[Connect keypair of “Crypto Bob”](./spec-examples/bob-connect-keypair.json)  
+[Ephemeral Connection Establishment Key between “Crypto Alice” and “Crypto Bob” used in chapter 15](./spec-examples/alice-bob-ece-key.json)  
 
-## Signed Profile of “Crypto Alice” in Chapter 7.1
+## Signed Profile of “Crypto Alice” in Chapter 9.1
 You can sign this profile yourself as follows:
 ```
 $ SpxpCryptoTool sign ./spec-examples/alice-short-profile-unsigned.json ./spec-examples/alice-profile-keypair.json
@@ -27,7 +30,7 @@ And to verify the signature:
 $ SpxpCryptoTool verify ./spec-examples/alice-short-profile-signed.json ./spec-examples/alice-profile-keypair.json
 ```
 
-## Certificate for “Crypto Bob” signed by “Crypto Alice” in Chapter 7.2
+## Certificate for “Crypto Bob” signed by “Crypto Alice” in Chapter 9.2
 You can sign this certificate yourself as follows:
 ```
 $ SpxpCryptoTool sign ./spec-examples/bob-cert-unsigned.json ./spec-examples/alice-profile-keypair.json
@@ -153,3 +156,86 @@ Remember to check the signature of this fragment before merging it into the prof
 $ SpxpCryptoTool verify ./spec-examples/alice-privatewebsite-signed-condensed.json ./spec-examples/alice-profile-keypair.json
 Signature valid.
 ```
+
+## Signed Profile of “Crypto Alice” in Chapter 15.2
+You can sign the profile in chapter 15.2 yourself as follows:
+```
+$ SpxpCryptoTool sign ./spec-examples/alice-profile-with-connect-unsigned.json ./spec-examples/alice-profile-keypair.json
+```
+And to verify the signature:
+```
+$ SpxpCryptoTool verify ./spec-examples/alice-profile-with-connect-signed.json ./spec-examples/alice-profile-keypair.json
+```
+
+## Signed Connection Package of “Crypto Alice” for “Crypto Bob” in Chapter 15.3
+You can sign the connection package created by “Crypto Alice” for “Crypto Bob” yourself as follows:
+```
+$ SpxpCryptoTool sign ./spec-examples/alice-connection_package-unsigned.json ./spec-examples/alice-profile-keypair.json
+```
+And to verify the signature:
+```
+$ SpxpCryptoTool verify ./spec-examples/alice-connection_package-signed.json ./spec-examples/alice-profile-keypair.json
+```
+
+## Signed Connection Request of “Crypto Alice” for “Crypto Bob” in Chapter 15.5
+You can sign the connection request from “Crypto Alice” to “Crypto Bob” yourself as follows:
+```
+$ SpxpCryptoTool sign ./spec-examples/alice-connection_request-unsigned.json ./spec-examples/alice-profile-keypair.json
+```
+And to verify the signature:
+```
+$ SpxpCryptoTool verify ./spec-examples/alice-connection_request-signed.json ./spec-examples/alice-profile-keypair.json
+```
+
+## Encrypted Connection Request of “Crypto Alice” for “Crypto Bob” in Chapter 15.7
+The `connection_request` request sent in chapter 15.7 contains the encrypted
+connection message Alice has created for Bob. This message is encrypted with an
+asymmetric encryption scheme, so that only Bob can decrypt it with his private
+key, while everybody can encrypt messages.  
+You can decrypt the `msg` with Bob's private connection key stored in his
+connection keypair as follows:
+```
+$ SpxpCryptoTool decryptasymjson ./spec-examples/alice-connection_request-signed-encrypted.json ./spec-examples/bob-connect-keypair.json
+```
+You can also encrypt this message yourself with Bob's public key, which is
+announced in the `connect` object of his profile root document:
+```
+$ SpxpCryptoTool encryptasymjson ./spec-examples/alice-connection_request-signed.json ./spec-examples/bob-connect-publickey.json
+```
+(This will create a different ciphertext and tag as a new random IV is chosen
+for each encryption)
+
+## Encrypted Connection Package for “Crypto Alice” from “Crypto Bob” in Chapter 15.8
+The `connection_accept` request sent in chapter 15.8 contains the encrypted
+connection package Bob has created for Alice. You can decrypt the `package`
+with the Ephemeral Connection Establishment key from the connect request message
+as follows:
+```
+$ SpxpCryptoTool decryptsymjson ./spec-examples/bob-connection_package-signed-encrypted.json ./spec-examples/alice-bob-ece-key.json
+```
+You can then check the signature on this package as follows:
+```
+$ SpxpCryptoTool verify ./spec-examples/bob-connection_package-signed.json ./spec-examples/bob-profile-keypair.json
+```
+You can also sign and encrypt this package yourself as follows:
+```
+$ SpxpCryptoTool sign ./spec-examples/bob-connection_package-unsigned.json ./spec-examples/bob-profile-keypair.json
+$ SpxpCryptoTool encryptsymjson ./spec-examples/bob-connection_package-signed.json ./spec-examples/alice-bob-ece-key.json
+```
+(This will create a different ciphertext and tag as a new random IV is chosen
+for each encryption)
+
+## Encrypted Connection Package for “Crypto Bob” from “Crypto Alice” in Chapter 15.8
+The connection package Alice has created and signed in chapter 15.2 appears in
+the server response in chapter 15.8 encrypted with the Ephemeral Connection
+Establishment key. You can decrypt the `package` from the server response as
+follows:
+```
+$ SpxpCryptoTool decryptsymjson ./spec-examples/alice-connection_package-signed-encrypted.json ./spec-examples/alice-bob-ece-key.json
+```
+You can also sign and encrypt this package yourself as follows:
+```
+$ SpxpCryptoTool encryptsymjson ./spec-examples/alice-connection_package-signed.json ./spec-examples/alice-bob-ece-key.json
+```
+(This will create a different ciphertext and tag as a new random IV is chosen
+for each encryption)

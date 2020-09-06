@@ -19,6 +19,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.spxp.crypto.SpxpConnectKeyPair;
+import org.spxp.crypto.SpxpConnectPublicKey;
 import org.spxp.crypto.SpxpCryptoException;
 import org.spxp.crypto.SpxpCryptoNoSuchKeyException;
 import org.spxp.crypto.SpxpCryptoToolsV03;
@@ -72,6 +73,10 @@ public class SpxpCryptoTool {
             genconnectkeypair(args);
         } else if(args[0].equals("extractconnectpublic")) {
             extractconnectpublic(args);
+        } else if(args[0].equals("encryptasymjson")) {
+            encryptasymjson(args);
+        } else if(args[0].equals("decryptasymjson")) {
+            decryptasymjson(args);
 		} else if(args[0].equals("help")) {
 			usage();
 		} else {
@@ -105,7 +110,7 @@ public class SpxpCryptoTool {
 		System.out.println("  decryptsymcompact <fileToDecrypt> [<symmetricKey>]");
 		System.out.println("      decrypts <fileToDecrypt> in JWE compact serialization with the 256 bit AES key from <symmetricKey>");
 		System.out.println("      prints the key id of the required key if no <symmetricKey> is given");
-		System.out.println("  encryptsymjson <fileToEncrypt> [<symmetricKey>[,<symmetricKey>]*]");
+		System.out.println("  encryptsymjson <fileToEncrypt> <symmetricKey>[,<symmetricKey>]*");
 		System.out.println("      encrypts <fileToEncrypt> with the 256 bit AES keys from the comma separated lis of <symmetricKey>s in JWE json serialization");
 		System.out.println("  decryptsymjson <fileToDecrypt> [<symmetricKey>]");
 		System.out.println("      decrypts <fileToDecrypt> in JWE json serialization with the 256 bit AES key from <symmetricKey>");
@@ -120,6 +125,10 @@ public class SpxpCryptoTool {
         System.out.println("      generates a new connect keypair");
         System.out.println("  extractconnectpublic <keyPairFile>");
         System.out.println("      extracts just the public key part from the connect keypair stored in <keyPairFile>");
+        System.out.println("  encryptasymjson <fileToEncrypt> <publicKeyFile>");
+        System.out.println("      encrypts <fileToEncrypt> with the public key of the connect keypair stored in <publicKeyFile> in JWE json serialization");
+        System.out.println("  decryptsymjson <fileToDecrypt> <keyPairFile>");
+        System.out.println("      decrypts <fileToDecrypt> in JWE json serialization with the private key of the connect keypair from <keyPairFile>");
 		System.out.println("  help");
 		System.out.println("      print this screen");
 		System.out.println();
@@ -359,6 +368,31 @@ public class SpxpCryptoTool {
         try(PrintWriter writer = new PrintWriter(System.out)) {
             publicJwk.write(writer, 4, 0);
         }
+    }
+    
+    public void encryptasymjson(String[] args) throws Exception {
+        if(args.length != 3) {
+            System.out.println("Error: Invalid number of options for command 'encryptasymjson'");
+            return;
+        }
+        String payload = (new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
+        JSONObject asymJwkObj = new JSONObject(new String(Files.readAllBytes(Paths.get(args[2])), StandardCharsets.UTF_8));
+        SpxpConnectPublicKey publicKey = SpxpCryptoToolsV03.getConnectPublicKey(asymJwkObj);
+        JSONObject obj = new JSONObject(SpxpCryptoToolsV03.encryptAsymmetricJson(payload, publicKey));
+        try(PrintWriter writer = new PrintWriter(System.out)) {
+            obj.write(writer, 4, 0);
+        }
+    }
+    
+    public void decryptasymjson(String[] args) throws Exception {
+        if(args.length != 3) {
+            System.out.println("Error: Invalid number of options for command 'decryptasymjson'");
+            return;
+        }
+        String ciphertext = (new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
+        JSONObject asymJwkObj = new JSONObject(new String(Files.readAllBytes(Paths.get(args[2])), StandardCharsets.UTF_8));
+        SpxpConnectKeyPair keyPair = SpxpCryptoToolsV03.getConnectKeyPair(asymJwkObj);
+        System.out.println(SpxpCryptoToolsV03.decryptAsymmetricJson(ciphertext, keyPair));
     }
 
 }
