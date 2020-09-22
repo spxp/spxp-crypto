@@ -673,14 +673,18 @@ public class SpxpCryptoToolsV03 {
         } catch (JSONException | IOException e) {
             throw new SpxpCryptoException("Error canonicalizing object", e);
         }
-        org.bouncycastle.math.ec.rfc8032.Ed25519.sign(profileKeyPair.getSecretKey(), 0, canonicalizedBytes, 0, canonicalizedBytes.length, signature, 0);
-        JSONObject signatureObject = new JSONObject();
-        signatureObject.put("key", profileKeyPair.getKeyId());
-        signatureObject.put("sig", encodeBase64Url(signature));
-        value.put("signature", signatureObject);
+        try {
+            org.bouncycastle.math.ec.rfc8032.Ed25519.sign(profileKeyPair.getSecretKey(), 0, canonicalizedBytes, 0, canonicalizedBytes.length, signature, 0);
+            JSONObject signatureObject = new JSONObject();
+            signatureObject.put("key", profileKeyPair.getKeyId());
+            signatureObject.put("sig", encodeBase64Url(signature));
+            value.put("signature", signatureObject);
+        } catch(IllegalArgumentException | IllegalStateException | JSONException e) {
+            throw new SpxpCryptoException(e);
+        }
     }
 
-    public static boolean verifySignature(JSONObject signedObject, SpxpProfilePublicKey publicKey, Collection<String> requiredGrants) throws SpxpCryptoException {
+    public static boolean verifySignature(JSONObject signedObject, SpxpProfilePublicKey publicKey, Collection<String> requiredPermissions) throws SpxpCryptoException {
         JSONObject signature = signedObject.optJSONObject("signature");
         if(signature == null) {
             return false;
@@ -710,29 +714,31 @@ public class SpxpCryptoToolsV03 {
                 return false;
             }
         } else if(keyObj instanceof JSONObject) {
-            if(requiredGrants == null) {
+            if(requiredPermissions == null) {
                 return false;
             }
             JSONObject certChain = (JSONObject)keyObj;
             SpxpProfilePublicKey signingAuthorityPublicKey;
             try {
-                if(!certChain.getJSONArray("grant").toList().containsAll(requiredGrants)) {
+                if(!certChain.getJSONArray("grant").toList().containsAll(requiredPermissions)) {
                     return false;
                 }
                 signingAuthorityPublicKey = getProfilePublicKey(certChain.getJSONObject("publicKey"));
             } catch(IllegalArgumentException | JSONException e) {
                 return false;
             }
-            ArrayList<String> requiredSignerGrants = new ArrayList<>(requiredGrants.size()+1);
-            requiredSignerGrants.addAll(requiredGrants);
-            if(requiredGrants.contains("grant")) {
-                if(!!requiredGrants.contains("ca")) {
-                    requiredSignerGrants.add("ca");
+            ArrayList<String> requiredSignerPermissions = new ArrayList<>(requiredPermissions.size()+1);
+            requiredSignerPermissions.addAll(requiredPermissions);
+            if(requiredPermissions.contains("grant")) {
+                if(!requiredSignerPermissions.contains("ca")) {
+                    requiredSignerPermissions.add("ca");
                 }
             } else {
-                requiredSignerGrants.add("grant");
+                if(!requiredSignerPermissions.contains("grant")) {
+                    requiredSignerPermissions.add("grant");
+                }
             }
-            if(!verifySignature(certChain, publicKey, requiredSignerGrants)) {
+            if(!verifySignature(certChain, publicKey, requiredSignerPermissions)) {
                 return false;
             }
             signingPublicKey = signingAuthorityPublicKey.getPublicKey();
