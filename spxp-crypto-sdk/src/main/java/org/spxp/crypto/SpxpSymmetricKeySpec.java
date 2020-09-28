@@ -1,5 +1,7 @@
 package org.spxp.crypto;
 
+import java.util.Arrays;
+
 public class SpxpSymmetricKeySpec {
     
     private final String keyId;
@@ -21,13 +23,38 @@ public class SpxpSymmetricKeySpec {
     public byte[] getSymmetricKey() {
         return symmetricKey;
     }
-    
-    public boolean equals(Object other) {
-        if(!(other instanceof SpxpSymmetricKeySpec)) {
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((keyId == null) ? 0 : keyId.hashCode());
+        result = prime * result + Arrays.hashCode(symmetricKey);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
             return false;
-        }
-        SpxpSymmetricKeySpec otherSymmetricKeySpec = (SpxpSymmetricKeySpec) other;
-        return this.keyId.equals(otherSymmetricKeySpec.getKeyId()) && this.symmetricKey.equals(otherSymmetricKeySpec.getSymmetricKey());
+        if (getClass() != obj.getClass())
+            return false;
+        SpxpSymmetricKeySpec other = (SpxpSymmetricKeySpec) obj;
+        if (keyId == null) {
+            if (other.keyId != null)
+                return false;
+        } else if (!keyId.equals(other.keyId))
+            return false;
+        if (!Arrays.equals(symmetricKey, other.symmetricKey))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "SpxpSymmetricKeySpec [keyId=" + keyId + ", symmetricKey=" + Arrays.toString(symmetricKey) + "]";
     }
 
 }
