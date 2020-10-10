@@ -30,6 +30,10 @@ public class SpxpConnectKeyPair {
     public byte[] getPublicKey() {
         return publicKey;
     }
+    
+    public SpxpConnectPublicKey extractConnectPublicKey() {
+        return new SpxpConnectPublicKey(keyId, publicKey);
+    }
 
     @Override
     public int hashCode() {

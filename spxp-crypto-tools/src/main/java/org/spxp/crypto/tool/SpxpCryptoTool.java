@@ -153,7 +153,7 @@ public class SpxpCryptoTool {
         }
         JSONObject keypairJwkObj = new JSONObject(new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
         SpxpProfileKeyPair keypair = SpxpCryptoToolsV03.getProfileKeyPair(keypairJwkObj);
-        JSONObject publicJwk = SpxpCryptoToolsV03.getPublicJWK(keypair);
+        JSONObject publicJwk = SpxpCryptoToolsV03.getPublicJWK(keypair.extractProfilePublicKey());
         try(PrintWriter writer = new PrintWriter(System.out)) {
             publicJwk.write(writer, 4, 0);
         }
@@ -364,7 +364,7 @@ public class SpxpCryptoTool {
         }
         JSONObject keypairJwkObj = new JSONObject(new String(Files.readAllBytes(Paths.get(args[1])), StandardCharsets.UTF_8));
         SpxpConnectKeyPair keypair = SpxpCryptoToolsV03.getConnectKeyPair(keypairJwkObj);
-        JSONObject publicJwk = SpxpCryptoToolsV03.getPublicJWK(keypair);
+        JSONObject publicJwk = SpxpCryptoToolsV03.getPublicJWK(keypair.extractConnectPublicKey());
         try(PrintWriter writer = new PrintWriter(System.out)) {
             publicJwk.write(writer, 4, 0);
         }

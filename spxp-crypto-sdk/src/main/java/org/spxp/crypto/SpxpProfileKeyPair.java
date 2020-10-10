@@ -30,6 +30,10 @@ public class SpxpProfileKeyPair {
     public byte[] getPublicKey() {
         return publicKey;
     }
+    
+    public SpxpProfilePublicKey extractProfilePublicKey() {
+        return new SpxpProfilePublicKey(keyId, publicKey);
+    }
 
     @Override
     public int hashCode() {

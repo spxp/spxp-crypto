@@ -494,7 +494,7 @@ public class SpxpCryptoToolsV03 {
             result.putOnce("iv", encodeBase64Url(iv));
             JSONObject recipientHeader = new JSONObject();
             recipientHeader.putOnce("kid", recipientKey.getKeyId());
-            recipientHeader.putOnce("epk", getPublicJWK(ephemeralKeypair));
+            recipientHeader.putOnce("epk", getPublicJWK(ephemeralKeypair.extractConnectPublicKey()));
             JSONObject recipientObject = new JSONObject();
             recipientObject.putOnce("header", recipientHeader);
             JSONArray recipients = new JSONArray();
@@ -892,12 +892,12 @@ public class SpxpCryptoToolsV03 {
         return jwkObj;
     }
     
-    public static JSONObject getPublicJWK(SpxpProfileKeyPair keyPair) {
+    public static JSONObject getPublicJWK(SpxpProfilePublicKey publicKey) {
         JSONObject jwkObj = new JSONObject();
-        jwkObj.put("kid", keyPair.getKeyId());
+        jwkObj.put("kid", publicKey.getKeyId());
         jwkObj.put("kty", "OKP");
         jwkObj.put("crv", "Ed25519");
-        jwkObj.put("x", encodeBase64Url(keyPair.getPublicKey()));
+        jwkObj.put("x", encodeBase64Url(publicKey.getPublicKey()));
         return jwkObj;
     }
     
@@ -920,12 +920,12 @@ public class SpxpCryptoToolsV03 {
         return jwkObj;
     }
     
-    public static JSONObject getPublicJWK(SpxpConnectKeyPair keyPair) {
+    public static JSONObject getPublicJWK(SpxpConnectPublicKey publicKey) {
         JSONObject jwkObj = new JSONObject();
-        jwkObj.put("kid", keyPair.getKeyId());
+        jwkObj.put("kid", publicKey.getKeyId());
         jwkObj.put("kty", "OKP");
         jwkObj.put("crv", "X25519");
-        jwkObj.put("x", encodeBase64Url(keyPair.getPublicKey()));
+        jwkObj.put("x", encodeBase64Url(publicKey.getPublicKey()));
         return jwkObj;
     }
     
