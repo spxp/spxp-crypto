@@ -689,7 +689,7 @@ public class SpxpCryptoToolsV03 {
         if(signature == null) {
             return false;
         }
-        String sigStr = signature.optString("sig");
+        String sigStr = signature.optString("sig", null);
         if(sigStr == null) {
             return false;
         }
