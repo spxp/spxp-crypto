@@ -321,7 +321,7 @@ public class SpxpCryptoToolsV03 {
                 throw new SpxpCryptoNoSuchKeyException();
             }
             // decode cryptographic material
-            String customAADEncoded = obj.optString("aad");
+            String customAADEncoded = obj.optString("aad", null);
             byte[] customAAD = customAADEncoded==null ? null : decodeBase64Url(customAADEncoded);
             byte[] iv = decodeBase64Url(obj.getString("iv"));
             byte[] cipher = decodeBase64Url(obj.getString("ciphertext"));
@@ -543,7 +543,7 @@ public class SpxpCryptoToolsV03 {
             byte[] cekBytes = calculateJweDerivedKey(z, "A256GCM", (new byte[0]), (new byte[0]), 256);
             SecretKey cek = new SecretKeySpec(cekBytes, AES_JCE_KEY_SPEC);
             // decode cryptographic material
-            String customAADEncoded = obj.optString("aad");
+            String customAADEncoded = obj.optString("aad", null);
             byte[] customAAD = customAADEncoded==null ? null : decodeBase64Url(customAADEncoded);
             byte[] iv = decodeBase64Url(obj.getString("iv"));
             byte[] cipher = decodeBase64Url(obj.getString("ciphertext"));
