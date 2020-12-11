@@ -1,6 +1,19 @@
 {
-    "data": [
-        "https://spxp.org/profile",
-        "https://spxp.org/wuerzburg"
-    ]
+    "data" : [ {
+        "uri": "http://testbed.spxp.org/0.3/greenrabbit943",
+        "publicKey": {
+            "kid": "key-greenrabbit943",
+            "kty": "OKP",
+            "crv": "Ed25519",
+            "x": "YX_7SvvFUGiMMsCdPhnG-DvK7tY2tisq23e--46Pa_k"
+        }
+    }, {
+        "uri": "http://testbed.spxp.org/0.3/bigcat321",
+        "publicKey": {
+            "kid": "key-bigcat321",
+            "kty": "OKP",
+            "crv": "Ed25519",
+            "x": "jrZeWJFn2ORfzOjwaHrybyq7XTEvexzEOwEnHo7Z9bE"
+        }
+    } ]
 }

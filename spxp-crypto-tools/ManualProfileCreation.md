@@ -75,7 +75,7 @@ Please double check that you did not accidentally include your private key `d`.
 This object is the smallest possible profile. You can now add more information
 that you want to be publicly available, like your website or an additional
 descriptive text. You can find all possible profile members in the [SPXP Spec in
-chapter 5](https://github.com/spxp/spxp-specs/blob/master/SpxpProfileSpec-V03.md#5-social-profile-root-document).
+chapter 5](https://github.com/spxp/spxp-specs/blob/v0.3/SPXP-Spec.md#5-social-profile-root-document).
 For example:
 ```json
 {
@@ -153,12 +153,29 @@ and add a list of social profile URIs you want to expose publicly as your
 “Friends”:
 ```json
 {
-    "data": [
-        "https://spxp.org/profile",
-        "https://spxp.org/wuerzburg"
-    ]
+    "data" : [ {
+        "uri": "http://testbed.spxp.org/0.3/greenrabbit943",
+        "publicKey": {
+            "kid": "key-greenrabbit943",
+            "kty": "OKP",
+            "crv": "Ed25519",
+            "x": "YX_7SvvFUGiMMsCdPhnG-DvK7tY2tisq23e--46Pa_k"
+        }
+    }, {
+        "uri": "http://testbed.spxp.org/0.3/bigcat321",
+        "publicKey": {
+            "kid": "key-bigcat321",
+            "kty": "OKP",
+            "crv": "Ed25519",
+            "x": "jrZeWJFn2ORfzOjwaHrybyq7XTEvexzEOwEnHo7Z9bE"
+        }
+    } ]
 }
 ```
+We are referencing other profiles not just by their profile URI, but combine
+this with their public key. So clients looking at your friends at some point in
+the future are able to validate that the information exposed through this URI is
+still the profile you considered your “Friend”.  
 As any information published via SPXP, it then has to be signed:
 ```
 $ SpxpCryptoTool sign john-doe-friends-unsigned.json john-doe-profile-keypair.json > john-doe-friends.json
@@ -166,13 +183,26 @@ $ SpxpCryptoTool sign john-doe-friends-unsigned.json john-doe-profile-keypair.js
 resulting in
 ```json
 {
-    "data": [
-        "https://spxp.org/profile",
-        "https://spxp.org/wuerzburg"
-    ],
+    "data" : [ {
+        "uri": "http://testbed.spxp.org/0.3/greenrabbit943",
+        "publicKey": {
+            "kid": "key-greenrabbit943",
+            "kty": "OKP",
+            "crv": "Ed25519",
+            "x": "YX_7SvvFUGiMMsCdPhnG-DvK7tY2tisq23e--46Pa_k"
+        }
+    }, {
+        "uri": "http://testbed.spxp.org/0.3/bigcat321",
+        "publicKey": {
+            "kid": "key-bigcat321",
+            "kty": "OKP",
+            "crv": "Ed25519",
+            "x": "jrZeWJFn2ORfzOjwaHrybyq7XTEvexzEOwEnHo7Z9bE"
+        }
+    } ],
     "signature": {
         "key": "-MUelyMS_IJ6Lc5b",
-        "sig": "QTVABvo5jgrIUgslt43V_js-Dskf9pjsN4CTGT0_6KyQorKe4irpndGc3vmyQbYdrc5PAYKtRzSCGSmFEC49Bg"
+        "sig": "ILo5iT4xY-QAcYEQ5oXiemM8DvzZw2tBsc81tqcz5CCCSA41wpPuE0fJoJ41QijmQSyUsnlTJnFh-OllZ9mbBA"
     }
 }
 ```
