@@ -39,7 +39,13 @@ This library implements the latest version 0.3 of SPXP in plain Java. It only
 depends on `org.json` for JSON operations and on Bouncycastle for the
 Ed25519 signature algorithm.
 
-## [spxp-crypto-sdk-V02](./spxp-crypto-sdk-V02)
+## [spxp-crypto-tools](./spxp-crypto-tools)
+This project provides a commandline application for the signing and encrypting
+operations in SPXP.  
+It can be used for example to manually create a SPXP profile by hand and to
+validate the signatures of published profiles.
+
+## [spxp-crypto-sdk-V02](./spxp-crypto-sdk-V02) (Obsolete)
 Version 0.2 of SPXP used plain JOSE for all cryptograhic operations and did not
 make any limitations in the use of JOSE. Hence implementations can freely chose
 whatever algorithm and encoding to use.  
@@ -47,9 +53,3 @@ To provide this freedom, this implementation relies on Apache's CXF libraries.
 Since these libraries have a quite heavy footprint and version 0.2 is outdated
 anyway, we chose to remove this implementation from the SDK and provide it as
 an extra dependency on top of the standard SDK.
-
-## [spxp-crypto-tools](./spxp-crypto-tools)
-This project provides a commandline application for the signing and encrypting
-operations in SPXP.  
-It can be used for example to manually create a SPXP profile by hand and to
-validate the signatures of published profiles.
