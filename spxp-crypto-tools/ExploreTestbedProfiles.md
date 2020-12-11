@@ -134,36 +134,38 @@ $ cat angrybear287-friends.json
 ```
 The posts endpoint is slightly different, as each post is signed individually:
 ```
-$ curl http://testbed.spxp.org/0.3/posts/_read-posts.php?profile=angrybear287 > angrybear287-posts-page1.json
+$ curl "http://testbed.spxp.org/0.3/posts/_read-posts.php?profile=angrybear287" > angrybear287-posts-page1.json
 $ cat angrybear287-posts-page1.json | jq '.data[2]' > angrybear287-temp-post.json
 $ SpxpCryptoTool verify angrybear287-temp-post.json angrybear287-publickey.json post,impersonate
 Signature valid.
 $ cat angrybear287-temp-post.json
 {
-    "seqts": "2019-12-03T00:37:37.953",
-    "createts": "2019-12-02T21:09:22.029",
-    "type": "text",
-    "message": "@LilliJ only 4 more hours til Akron!",
-    "place": {"uri": "http://testbed.spxp.org/0.3/place.tokyo"},
-    "signature": {
-        "sig": "gmRxsb4Z0OKCjOgmAuyZMxN2SkL_K3Maa24TKj5Guq8z028oydZ-ABEoyxag_MZxLNQn5sulPmqm9GR_ggotAw",
-        "key": {
-            "publicKey": {
-                "kid": "gIBPPPv8zaCHvr8N",
-                "kty": "OKP",
-                "crv": "Ed25519",
-                "x": "WZaTpxIGmbbLMtbCMEHR0tMu-lvTQBGa3CWDYWxIF2Y"
-            },
-            "grant": [
-                "impersonate",
-                "post"
-            ],
-            "signature": {
-                "sig": "riHvySkudKWFJVDihbm1YsRRnIWbtErEtbrKTxeFUkCRd1FToODfGsax9NT93XQfl8fhI4vSB8BDHi-HItHWDw",
-                "key": "key-angrybear287"
-            }
-        }
+  "createts": "2019-12-02T21:09:22.029",
+  "type": "text",
+  "message": "@LilliJ only 4 more hours til Akron!",
+  "place": {
+    "uri": "http://testbed.spxp.org/0.3/place.tokyo"
+  },
+  "signature": {
+    "sig": "gmRxsb4Z0OKCjOgmAuyZMxN2SkL_K3Maa24TKj5Guq8z028oydZ-ABEoyxag_MZxLNQn5sulPmqm9GR_ggotAw",
+    "key": {
+      "publicKey": {
+        "kid": "gIBPPPv8zaCHvr8N",
+        "kty": "OKP",
+        "crv": "Ed25519",
+        "x": "WZaTpxIGmbbLMtbCMEHR0tMu-lvTQBGa3CWDYWxIF2Y"
+      },
+      "grant": [
+        "impersonate",
+        "post"
+      ],
+      "signature": {
+        "sig": "riHvySkudKWFJVDihbm1YsRRnIWbtErEtbrKTxeFUkCRd1FToODfGsax9NT93XQfl8fhI4vSB8BDHi-HItHWDw",
+        "key": "key-angrybear287"
+      }
     }
+  },
+  "seqts": "2019-12-03T00:37:37.953"
 }
 ```
 This post has not been signed by the profile keypair directly, but by the
@@ -209,7 +211,7 @@ This profile uses an encrypted resource as profile photo. First, we need to
 download the encrypted resource and extract the profile photo object:
 ```
 $ curl http://testbed.spxp.org/0.3/images_enc/lazyfish483.encrypted --output lazyfish483.encrypted 
-$ curl http://testbed.spxp.org/0.3/lazyfish483 | '.profilePhoto' > lazyfish483-profilephoto.json
+$ curl http://testbed.spxp.org/0.3/lazyfish483 | jq '.profilePhoto' > lazyfish483-profilephoto.json
 $ SpxpCryptoTool decryptresource lazyfish483.encrypted lazyfish483-profilephoto.json lazyfish483.jpeg
 ```
 You can now open the decrypted profile image.
@@ -222,7 +224,7 @@ This testbed server does not perform this redaction to make these profiles
 easier to explore.  
 Let's extract the first element and investigate the required key:
 ```
-$ cat angrybear287-profile-root.json | jq --raw-output '.private[0]' > angrybear287-profile-private0-encrypted.txt
+$ cat angrybear287-profile-root.json | jq --raw-output '.private[0]' | tr -d '\n' > angrybear287-profile-private0-encrypted.txt
 $ SpxpCryptoTool decryptsymcompact angrybear287-profile-private0-encrypted.txt
 grp-angrybear287-friends.FxkqfHGu
 ```
@@ -244,48 +246,43 @@ $ cat angrybear287-readerkey-for-greenrabbit943.json
 With this information, we can now ask the keys endpoint to give us all
 intermediate keys so  that we are able to finally read the private data:
 ```
-$ curl http://testbed.spxp.org/0.3/keys/_read-keys.php?profile=angrybear287&reader=angrybear287-readerkey-for-greenrabbit943&request=grp-angrybear287-friends.FxkqfHGu > angrybear287-keys-response.json
+$ curl "http://testbed.spxp.org/0.3/keys/_read-keys.php?profile=angrybear287&reader=angrybear287-readerkey-for-greenrabbit943&request=grp-angrybear287-friends.FxkqfHGu" | jq . > angrybear287-keys-response.json
 $ cat angrybear287-keys-response.json
 {
-    "grp-angrybear287-friends-virt_0" : {
-        "grp-angrybear287-friends" : {
-            "FxkqfHGu" : "eyJraWQiOiJncnAtYW5ncnliZWFyMjg3LWZyaWVuZHMtdmlydF8wLlg1UEgxVU5QIiwiZW5jIjoiQTI1NkdDTSIsImFsZyI6ImRpciJ9..z90481PfoXspYvso.aAYyYm-yzA49ZY0FfLFiJLMJrZLMQkHLXljQGYDbcfpOkfwVEvJXvumNm8j4Xw1tUpd_vxv90maSu06qr-u9NhzSU1Uj7hzCuef3npRiCGdh-ztCKMmswx334l7UvEUCdsV75ssNmapkSlcFiWYxgKm9cksqFD7IrQ.9ECf-Nmbn3o5_L9z5Ohqmw"
-         }
-    },
-    "angrybear287-readerkey-for-greenrabbit943" : {
-        "grp-angrybear287-friends-virt_0" : {
-            "X5PH1UNP" : "eyJraWQiOiJhbmdyeWJlYXIyODctcmVhZGVya2V5LWZvci1ncmVlbnJhYmJpdDk0MyIsImVuYyI6IkEyNTZHQ00iLCJhbGciOiJkaXIifQ..q9l-Te6kkzRDZzF_.sqlpjmUOL9MQpdQPRqwjJGOqEtkn0EMIqbtKyCXHPWHoZrYmml37QDK5fZmVyB_pkycKy95AcN9G8FI0e5WJEFWU77JIWgsGTDDX95ai50D1BKagMQzUN_lnhuZLlvjU7JpxK3jwoNwIjuhTpS0gcNIcJ3EyrG25SCnbzLUzWfQ.hrWDW3yPNf17gB2UepX_dQ"
-        }
+  "grp-angrybear287-friends-virt_0": {
+    "grp-angrybear287-friends": {
+      "FxkqfHGu": "eyJraWQiOiJncnAtYW5ncnliZWFyMjg3LWZyaWVuZHMtdmlydF8wLlg1UEgxVU5QIiwiZW5jIjoiQTI1NkdDTSIsImFsZyI6ImRpciJ9..z90481PfoXspYvso.aAYyYm-yzA49ZY0FfLFiJLMJrZLMQkHLXljQGYDbcfpOkfwVEvJXvumNm8j4Xw1tUpd_vxv90maSu06qr-u9NhzSU1Uj7hzCuef3npRiCGdh-ztCKMmswx334l7UvEUCdsV75ssNmapkSlcFiWYxgKm9cksqFD7IrQ.9ECf-Nmbn3o5_L9z5Ohqmw"
     }
+  },
+  "angrybear287-readerkey-for-greenrabbit943": {
+    "grp-angrybear287-friends-virt_0": {
+      "X5PH1UNP": "eyJraWQiOiJhbmdyeWJlYXIyODctcmVhZGVya2V5LWZvci1ncmVlbnJhYmJpdDk0MyIsImVuYyI6IkEyNTZHQ00iLCJhbGciOiJkaXIifQ..q9l-Te6kkzRDZzF_.sqlpjmUOL9MQpdQPRqwjJGOqEtkn0EMIqbtKyCXHPWHoZrYmml37QDK5fZmVyB_pkycKy95AcN9G8FI0e5WJEFWU77JIWgsGTDDX95ai50D1BKagMQzUN_lnhuZLlvjU7JpxK3jwoNwIjuhTpS0gcNIcJ3EyrG25SCnbzLUzWfQ.hrWDW3yPNf17gB2UepX_dQ"
+    }
+  }
 }
 ```
-The first object is telling us that the reader key `angrybear287-readerkey-for-blackfish356`
-can decrypt round keys for the key group `grp-angrybear287-family-virt\_0`.  
+The second object is telling us that the reader key `angrybear287-readerkey-for-greenrabbit943`
+can decrypt round keys for the key group `grp-angrybear287-friends-virt_0`.  
 Let's decrypt the first key:
 ```
-$ cat angrybear287-keys-response.json | jq --raw-output '.\["angrybear287-readerkey-for-blackfish356"\]\["grp-angrybear287-family-virt\_0"\]\["thyxsDtG"\]' > grp-angrybear287-family-virt\_0\_thyxsDtG\_encrypted.txt
-$ SpxpCryptoTool decryptsymcompact grp-angrybear287-family-virt\_0\_thyxsDtG\_encrypted.txt angrybear287-readerkey-for-blackfish356.json > grp-angrybear287-family-virt\_0\_thyxsDtG.json
+$ cat angrybear287-keys-response.json | jq --raw-output '.["angrybear287-readerkey-for-greenrabbit943"]["grp-angrybear287-friends-virt_0"]["X5PH1UNP"]' | tr -d '\n' > grp-angrybear287-friends-virt_0_X5PH1UNP_encrypted.txt
+$ SpxpCryptoTool decryptsymcompact grp-angrybear287-friends-virt_0_X5PH1UNP_encrypted.txt angrybear287-readerkey-for-greenrabbit943.json > grp-angrybear287-friends-virt_0_X5PH1UNP.json
 ```
-Next, we can use this key to decrypt the round key in the group `grp-angrybear287-family`:
+Now we can decrypt the key we need on the private data:
 ```
-$ cat angrybear287-keys-response.json | jq --raw-output '.\["grp-angrybear287-family-virt\_0"\]\["grp-angrybear287-family"\]\["fKQPBoda"\]' > grp-angrybear287-family\_fKQPBoda\_encrypted.txt
-$ SpxpCryptoTool decryptsymcompact grp-angrybear287-family\_fKQPBoda\_encrypted.txt grp-angrybear287-family-virt\_0\_thyxsDtG.json > grp-angrybear287-family\_fKQPBoda.json
+$ cat angrybear287-keys-response.json | jq --raw-output '.["grp-angrybear287-friends-virt_0"]["grp-angrybear287-friends"]["FxkqfHGu"]' | tr -d '\n' > grp-angrybear287-friends_FxkqfHGu_encrypted.txt
+$ SpxpCryptoTool decryptsymcompact grp-angrybear287-friends_FxkqfHGu_encrypted.txt grp-angrybear287-friends-virt_0_X5PH1UNP.json > grp-angrybear287-friends_FxkqfHGu.json
 ```
-And finally we can decrypt the key we need on the private data:
-```
-$ cat angrybear287-keys-response.json | jq --raw-output '.\["grp-angrybear287-family"\]\["grp-angrybear287-friends"\]\["ujlSBWKy"\]' > grp-angrybear287-friends\_ujlSBWKy\_encrypted.txt
-$ SpxpCryptoTool decryptsymcompact grp-angrybear287-friends\_ujlSBWKy\_encrypted.txt grp-angrybear287-family\_fKQPBoda.json > grp-angrybear287-friends\_ujlSBWKy.json
-```
-Now we finally have the key `grp-angrybear287-friends.ujlSBWKy` to decrypt the
+Now we finally have the key `grp-angrybear287-friends.FxkqfHGu` to decrypt the
 private data in the profile root object. We need to check the signature on each
 decrypted private object:
 ```
-$ SpxpCryptoTool decryptsymcompact angrybear287-profile-private0-encrypted.txt grp-angrybear287-friends\_ujlSBWKy.json > angrybear287-profile-private0.json
+$ SpxpCryptoTool decryptsymcompact angrybear287-profile-private0-encrypted.txt grp-angrybear287-friends_FxkqfHGu.json > angrybear287-profile-private0.json
 $ SpxpCryptoTool verify angrybear287-profile-private0.json angrybear287-publickey.json
 Signature valid.
 $ cat angrybear287-profile-private0.json
-{"gender":"male","website":"https://example.com","email":"anthony.wells@example.com","location":"http://testbed.spxp.org/0.3/place.wuerzburg","signature":{...}}
+{"shortInfo":"Much like music, great art is also found in the spaces between your graphic elements.","about":"Lorem ipsum ...","gender":"male","birthDayAndMonth":"20-02","hometown":{"uri":"http://testbed.spxp.org/0.3/place.rome"},"signature":{...}}
 ```
-With the reader key `angrybear287-readerkey-for-blackfish356` we have now been
+With the reader key `angrybear287-readerkey-for-greenrabbit943` we have now been
 able to decrypt this additional private information. A client would merge this
 information into the profile root object before interpreting and displaying it.
