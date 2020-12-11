@@ -15,14 +15,10 @@
             "kty" : "OKP",
             "crv" : "X25519",
             "x" : "ixVNCGQUR8gS6bkBDwh9IR4S_YAgkdwGNfJrqtsbTBU"
-        },
-        "acceptedTokens" : [ {
-            "method" : "spxp.org:webflow:1.0",
-            "start" : "https://profiles.example.com/acquire-token"
-        } ]
+        }
     },
     "signature": {
-        "sig": "Zhz30juKG4yWH7qUYhnyPbc9nsG3O4WEZBhkNu5c2qkMUKHcn6tsB9yVeqVbqTEeXoQLWPLFbl8eoilVzIwzAQ",
+        "sig": "KwkZSI9hZQOxZbzlXviDvSL6ez2qJfimPLiP4vvFIOqgTqArimMagLuqYK8NM5F7BLRG5C_zp1VoExrU6Ps0DQ",
         "key": "C8xSIBPKRTcXxFix"
     }
 }
