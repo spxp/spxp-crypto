@@ -48,29 +48,29 @@ public class SpxpCryptoToolsV03 {
     private static final int A256GCM_IV_SIZE = 96;
 
     private static final int A256GCM_AUTH_TAG_LENGTH = 128;
-    
+
     private static final String A256GCM_JCE_ALGO_SPEC = "AES/GCM/NoPadding";
-    
+
     private static final String AES_JCE_KEY_SPEC = "AES";
-    
+
     private static SecureRandom secureRandom = new SecureRandom();
 
     private static Encoder urlEncoder = Base64.getUrlEncoder().withoutPadding();
-    
+
     private static Decoder urlDecoder = Base64.getUrlDecoder();
-    
+
     public static HashSet<String> OMIT_MEMBERS_SIGN = new HashSet<String>(Arrays.asList(new String[] {"private", "seqts"}));
-    
+
     public static HashSet<String> OMIT_MEMBERS_VERIFY = new HashSet<String>(Arrays.asList(new String[] {"private", "seqts", "signature"}));
 
     private SpxpCryptoToolsV03() {
         // prevent instantiation
     }
-    
+
     public static String encodeBase64Url(byte[] data) {
         return urlEncoder.encodeToString(data);
     }
-    
+
     public static byte[] decodeBase64Url(String data) {
         return urlDecoder.decode(data);
     }
@@ -127,7 +127,7 @@ public class SpxpCryptoToolsV03 {
             throw new SpxpCryptoException(e);
         }
     }
-    
+ 
     private static byte[] calculateAAD(String headersJson, byte[] customAAD) {
         byte[] headerBytes = headersJson.getBytes(StandardCharsets.UTF_8);
         String base64UrlHeadersInJson = encodeBase64Url(headerBytes);
@@ -140,7 +140,7 @@ public class SpxpCryptoToolsV03 {
         System.arraycopy(customAAD, 0, newAAD, headersAAD.length + 1, customAAD.length);
         return newAAD;
     }
-    
+
     public static String decryptSymmetricCompact(String compact, SpxpKeyProvider keyProvider) throws SpxpCryptoException
     {
         try
@@ -204,7 +204,7 @@ public class SpxpCryptoToolsV03 {
             throw new SpxpCryptoException(e);
         }
     }
-    
+
     public static String encryptSymmetricJson(String payload, List<SpxpSymmetricKeySpec> recipientKeys) throws SpxpCryptoException
     {
         try
@@ -254,7 +254,7 @@ public class SpxpCryptoToolsV03 {
             throw new SpxpCryptoException(e);
         }
     }
-    
+
     private static JSONObject encryptCEKPerRecipient(SecretKey cek, SpxpSymmetricKeySpec recipientKeySpec) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException {
         // encrypt CEK
         byte[] iv = new byte[A256GCM_IV_SIZE / 8];
@@ -277,7 +277,7 @@ public class SpxpCryptoToolsV03 {
         recipientObj.putOnce("encrypted_key", encodeBase64Url(wrappedKey));
         return recipientObj;
     }
-    
+
     public static String decryptSymmetricJson(String json, SpxpKeyProvider keyProvider) throws SpxpCryptoException
     {
         try
@@ -351,7 +351,7 @@ public class SpxpCryptoToolsV03 {
             throw new SpxpCryptoException(e);
         }
     }
-    
+
     private static SecretKey decryptCEK(SecretKey keyEncryptionKey, JSONObject recipient) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, SpxpCryptoException {
         byte[] encryptedKey = decodeBase64Url(recipient.getString("encrypted_key"));
         JSONObject recipientHeader = recipient.getJSONObject("header");
@@ -372,7 +372,7 @@ public class SpxpCryptoToolsV03 {
         }
         return result;
     }
-    
+
     public static String encryptResource(InputStream src, OutputStream dest, String uri) throws IOException, SpxpCryptoException {
         try {
             // content encryption key
@@ -415,7 +415,7 @@ public class SpxpCryptoToolsV03 {
             throw new SpxpCryptoException(e);
         }
     }
-    
+
     public static void decryptResource(InputStream src, OutputStream dest, String json) throws IOException, SpxpCryptoException {
         try {
             JSONObject obj = new JSONObject(json);
@@ -448,7 +448,7 @@ public class SpxpCryptoToolsV03 {
             throw new SpxpCryptoException(e);
         }
     }
-    
+
     public static String encryptAsymmetricJson(String payload, SpxpConnectPublicKey recipientKey /*, String aad*/) throws SpxpCryptoException
     {
         try
@@ -507,7 +507,7 @@ public class SpxpCryptoToolsV03 {
             throw new SpxpCryptoException(e);
         }
     }
-    
+
     public static String decryptAsymmetricJson(String json, SpxpConnectKeyPair keyPair) throws SpxpCryptoException
     {
         try
@@ -573,7 +573,7 @@ public class SpxpCryptoToolsV03 {
             throw new SpxpCryptoException(e);
         }
     }
-    
+
     public static byte[] generateSymmetricKey(int bitlen)
     {
         if(bitlen % 8 != 0)
@@ -584,7 +584,7 @@ public class SpxpCryptoToolsV03 {
         secureRandom.nextBytes(result);
         return result;
     }
-    
+
     public static enum KeyIdSize {
         SHORT(6), LONG(12);
         private int sizeInBytes;
@@ -595,14 +595,14 @@ public class SpxpCryptoToolsV03 {
             return sizeInBytes;
         }
     }
-    
+
     public static String generateRandomKeyId(KeyIdSize size)
     {
         byte[] result = new byte[size.getSizeInBytes()];
         secureRandom.nextBytes(result);
         return encodeBase64Url(result);
     }
-    
+
     public static SpxpProfileKeyPair generateProfileKeyPair() {
         byte[] publicKey = new byte[org.bouncycastle.math.ec.rfc8032.Ed25519.PUBLIC_KEY_SIZE];
         byte[] secretKey = new byte[org.bouncycastle.math.ec.rfc8032.Ed25519.SECRET_KEY_SIZE];
@@ -610,7 +610,7 @@ public class SpxpCryptoToolsV03 {
         org.bouncycastle.math.ec.rfc8032.Ed25519.generatePublicKey(secretKey, 0, publicKey, 0);
         return new SpxpProfileKeyPair(generateRandomKeyId(KeyIdSize.LONG), secretKey, publicKey);
     }
-    
+
     public static SpxpConnectKeyPair generateConnectKeyPair() {
         byte[] publicKey = new byte[org.bouncycastle.math.ec.rfc8032.Ed25519.PUBLIC_KEY_SIZE];
         byte[] secretKey = new byte[org.bouncycastle.math.ec.rfc8032.Ed25519.SECRET_KEY_SIZE];
@@ -618,7 +618,7 @@ public class SpxpCryptoToolsV03 {
         org.bouncycastle.math.ec.rfc7748.X25519.generatePublicKey(secretKey, 0, publicKey, 0);
         return new SpxpConnectKeyPair(generateRandomKeyId(KeyIdSize.LONG), secretKey, publicKey);
     }
-    
+
     private static byte[] calculateECDHKeyAgreement(SpxpConnectKeyPair privateKey, SpxpConnectPublicKey publicKey) throws SpxpCryptoException
     {
         byte[] secret = new byte[org.bouncycastle.math.ec.rfc7748.X25519.POINT_SIZE];
@@ -628,7 +628,7 @@ public class SpxpCryptoToolsV03 {
         }
         return secret;
     }
-    
+
     private static byte[] calculateJweDerivedKey(byte[] z, String algoName, byte[] apu, byte[] apv, int targetKeyBitLen) throws SpxpCryptoException
     {
         if(targetKeyBitLen > 256)
@@ -661,7 +661,7 @@ public class SpxpCryptoToolsV03 {
             throw new SpxpCryptoException(e);
         }
     }
-    
+
     public static void signObject(JSONObject value, SpxpProfileKeyPair profileKeyPair) throws SpxpCryptoException {
         if(value.has("signature")) {
             throw new SpxpCryptoException("Object already signed");
@@ -757,13 +757,13 @@ public class SpxpCryptoToolsV03 {
             return false;
         }
     }
-    
+
     public static String canonicalize(JSONObject jsonObject, Set<String> omitMembers) throws JSONException, IOException {
         StringWriter writer = new StringWriter();
         writeCanonicalizedJSONObject(writer, jsonObject, omitMembers);
         return writer.toString();
     }
-    
+
     private static void writeQuotedString(Writer writer, String value) throws JSONException, IOException {
         writer.write('"');
         for(int i = 0; i < value.length(); i++) {
@@ -803,7 +803,7 @@ public class SpxpCryptoToolsV03 {
         }
         writer.write('"');
     }
-    
+
     private static void writeCanonicalizedJSONObject(Writer writer, JSONObject jsonObject, Set<String> omitMembers) throws JSONException, IOException {
         boolean commanate = false;
         writer.write('{');
@@ -881,7 +881,7 @@ public class SpxpCryptoToolsV03 {
         }
         writer.write(']');
     }
-    
+
     public static JSONObject getKeypairJWK(SpxpProfileKeyPair keyPair) {
         JSONObject jwkObj = new JSONObject();
         jwkObj.put("kid", keyPair.getKeyId());
@@ -891,7 +891,7 @@ public class SpxpCryptoToolsV03 {
         jwkObj.put("d", encodeBase64Url(keyPair.getSecretKey()));
         return jwkObj;
     }
-    
+
     public static JSONObject getPublicJWK(SpxpProfilePublicKey publicKey) {
         JSONObject jwkObj = new JSONObject();
         jwkObj.put("kid", publicKey.getKeyId());
@@ -900,7 +900,7 @@ public class SpxpCryptoToolsV03 {
         jwkObj.put("x", encodeBase64Url(publicKey.getPublicKey()));
         return jwkObj;
     }
-    
+
     public static JSONObject getSymmetricJWK(SpxpSymmetricKeySpec keySpec) {
         JSONObject jwkObj = new JSONObject();
         jwkObj.put("kid", keySpec.getKeyId());
@@ -909,7 +909,7 @@ public class SpxpCryptoToolsV03 {
         jwkObj.put("k", encodeBase64Url(keySpec.getSymmetricKey()));
         return jwkObj;
     }
-    
+
     public static JSONObject getKeypairJWK(SpxpConnectKeyPair keyPair) {
         JSONObject jwkObj = new JSONObject();
         jwkObj.put("kid", keyPair.getKeyId());
@@ -919,7 +919,7 @@ public class SpxpCryptoToolsV03 {
         jwkObj.put("d", encodeBase64Url(keyPair.getSecretKey()));
         return jwkObj;
     }
-    
+
     public static JSONObject getPublicJWK(SpxpConnectPublicKey publicKey) {
         JSONObject jwkObj = new JSONObject();
         jwkObj.put("kid", publicKey.getKeyId());
@@ -928,7 +928,7 @@ public class SpxpCryptoToolsV03 {
         jwkObj.put("x", encodeBase64Url(publicKey.getPublicKey()));
         return jwkObj;
     }
-    
+
     public static SpxpProfileKeyPair getProfileKeyPair(JSONObject jwk) throws SpxpCryptoException {
         try {
             String kid = jwk.getString("kid");
@@ -947,7 +947,7 @@ public class SpxpCryptoToolsV03 {
             throw new SpxpCryptoException("Invalid keypair", e);
         }
     }
-    
+
     public static SpxpProfilePublicKey getProfilePublicKey(JSONObject jwk) throws SpxpCryptoException {
         try {
             String kid = jwk.getString("kid");
@@ -965,7 +965,7 @@ public class SpxpCryptoToolsV03 {
             throw new SpxpCryptoException("Invalid public key", e);
         }
     }
-    
+
     public static SpxpSymmetricKeySpec getSymmetricKeySpec(JSONObject jwk) throws SpxpCryptoException {
         try {
             String kid = jwk.getString("kid");
@@ -983,7 +983,7 @@ public class SpxpCryptoToolsV03 {
             throw new SpxpCryptoException("Invalid symmetric key", e);
         }
     }
-    
+
     public static SpxpConnectKeyPair getConnectKeyPair(JSONObject jwk) throws SpxpCryptoException {
         try {
             String kid = jwk.getString("kid");
@@ -1002,7 +1002,7 @@ public class SpxpCryptoToolsV03 {
             throw new SpxpCryptoException("Invalid keypair", e);
         }
     }
-    
+
     public static SpxpConnectPublicKey getConnectPublicKey(JSONObject jwk) throws SpxpCryptoException {
         try {
             String kid = jwk.getString("kid");

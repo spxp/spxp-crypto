@@ -3,11 +3,11 @@ package org.spxp.crypto;
 import java.util.Arrays;
 
 public class SpxpProfileKeyPair {
-    
+
     private String keyId;
-    
+
     private byte[] secretKey;
-    
+
     private byte[] publicKey;
 
     public SpxpProfileKeyPair(String keyId, byte[] secretKey, byte[] publicKey) {
@@ -18,19 +18,19 @@ public class SpxpProfileKeyPair {
         this.secretKey = secretKey;
         this.publicKey = publicKey;
     }
-    
+
     public String getKeyId() {
         return keyId;
     }
-    
+
     public byte[] getSecretKey() {
         return secretKey;
     }
-    
+
     public byte[] getPublicKey() {
         return publicKey;
     }
-    
+
     public SpxpProfilePublicKey extractProfilePublicKey() {
         return new SpxpProfilePublicKey(keyId, publicKey);
     }

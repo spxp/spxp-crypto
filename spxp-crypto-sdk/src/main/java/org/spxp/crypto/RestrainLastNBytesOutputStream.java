@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class RestrainLastNBytesOutputStream extends FilterOutputStream {
-    
+
     private int n = 0;
-    
+
     private byte[] ringBuffer = null;
-    
+
     private int writePos = 0;
-    
+
     private boolean wrappedAround = false;
 
     public RestrainLastNBytesOutputStream(OutputStream out, int n) {
@@ -31,7 +31,7 @@ public class RestrainLastNBytesOutputStream extends FilterOutputStream {
             wrappedAround = true;
         }
     }
-    
+
     public byte[] getRestrainedBytes() {
         if(wrappedAround) {
             byte[] result = new byte[n];

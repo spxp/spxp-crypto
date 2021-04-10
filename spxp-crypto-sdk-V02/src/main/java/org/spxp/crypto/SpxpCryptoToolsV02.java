@@ -41,9 +41,9 @@ public class SpxpCryptoToolsV02 {
     private SpxpCryptoToolsV02() {
         // prevent instantiation
     }
-    
+
     private static SecureRandom secureRandom = new SecureRandom();
-    
+
     public static String encryptSymmetricCompact(String payload, String keyId, byte[] key) throws SpxpCryptoException
     {
         try
@@ -62,7 +62,7 @@ public class SpxpCryptoToolsV02 {
             throw new SpxpCryptoException(je);
         }
     }
-    
+
     public static String decryptSymmetricCompact(String compact, SpxpKeyProvider keyProvider) throws SpxpCryptoException
     {
         try
@@ -81,7 +81,7 @@ public class SpxpCryptoToolsV02 {
             throw new SpxpCryptoException(je);
         }
     }
-    
+
     public static String encryptSymmetricJson(String payload, String extraAAD, List<SpxpSymmetricKeySpec> recipientKeys) throws SpxpCryptoException
     {
         try
@@ -109,7 +109,7 @@ public class SpxpCryptoToolsV02 {
             throw new SpxpCryptoException(je);
         }
     }
-    
+
     public static String decryptSymmetricJson(String ciphertext, SpxpKeyProvider keyProvider) throws SpxpCryptoException
     {
         try
@@ -139,7 +139,7 @@ public class SpxpCryptoToolsV02 {
             throw new SpxpCryptoException(je);
         }
     }
-    
+
     public static String encryptWithSharedSecret(String groupKeyJwk, byte[] peerSharedSecret) throws SpxpCryptoException
     {
         try
@@ -154,7 +154,7 @@ public class SpxpCryptoToolsV02 {
             throw new SpxpCryptoException(je);
         }
     }
-    
+
     public static String decryptWithSharedSecret(String compact, byte[] peerSharedSecret) throws SpxpCryptoException
     {
         try
@@ -172,7 +172,7 @@ public class SpxpCryptoToolsV02 {
             throw new SpxpCryptoException(je);
         }
     }
-    
+
     public static byte[] calculateECDHSharedSecret(ECPrivateKey myPrivateKey, ECPublicKey peerPublicKey) throws SpxpCryptoException
     {
         try
@@ -187,7 +187,7 @@ public class SpxpCryptoToolsV02 {
             throw new SpxpCryptoException(e);
         }
     }
-    
+
     public static byte[] calculateDerivedKey(byte[] sharedSecret, String keyId, int outputBitlen) throws SpxpCryptoException
     {
         if(outputBitlen % 8 != 0)
@@ -214,7 +214,7 @@ public class SpxpCryptoToolsV02 {
             throw new SpxpCryptoException(e);
         }
     }
-    
+
     public static byte[] generateSymmetricKey(int bitlen)
     {
         if(bitlen % 8 != 0)
@@ -225,7 +225,7 @@ public class SpxpCryptoToolsV02 {
         secureRandom.nextBytes(result);
         return result;
     }
-    
+
     public static String generateRandomKeyId(boolean longFormat)
     {
         byte[] result = new byte[longFormat ? 6 : 12];

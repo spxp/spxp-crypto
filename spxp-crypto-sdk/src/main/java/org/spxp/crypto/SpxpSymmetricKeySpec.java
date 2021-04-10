@@ -3,9 +3,9 @@ package org.spxp.crypto;
 import java.util.Arrays;
 
 public class SpxpSymmetricKeySpec {
-    
+
     private final String keyId;
-    
+
     private final byte[] symmetricKey;
 
     public SpxpSymmetricKeySpec(String keyId, byte[] symmetricKey) {

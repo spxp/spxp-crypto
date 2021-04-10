@@ -3,7 +3,7 @@ package org.spxp.crypto;
 import java.util.HashMap;
 
 public enum SpxpCertificatePermission {
-    
+
     POST("post"),
     FRIENDS("friends"),
     GRANT("grant"),
@@ -11,9 +11,9 @@ public enum SpxpCertificatePermission {
     IMPERSONATE("impersonate");
 
     private String key;
-    
+
     private static HashMap<String, SpxpCertificatePermission> keyToEnum = buildKeyToEnumMap();
-    
+
     private static HashMap<String, SpxpCertificatePermission> buildKeyToEnumMap() {
         HashMap<String, SpxpCertificatePermission> result = new HashMap<>(values().length);
         for(SpxpCertificatePermission value : values()) {
@@ -21,15 +21,15 @@ public enum SpxpCertificatePermission {
         }
         return result;
     }
-    
+
     private SpxpCertificatePermission(String key) {
         this.key = key;
     }
-    
+
     public String getKey() {
         return key;
     }
-    
+
     public static SpxpCertificatePermission fromKey(String key) {
         SpxpCertificatePermission result = keyToEnum.get(key);
         if(result == null) {
@@ -37,5 +37,5 @@ public enum SpxpCertificatePermission {
         }
         return result;
     }
-    
+
 }
