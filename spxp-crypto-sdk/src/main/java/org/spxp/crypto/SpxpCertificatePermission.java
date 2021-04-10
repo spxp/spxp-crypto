@@ -15,7 +15,7 @@ public enum SpxpCertificatePermission {
     private static HashMap<String, SpxpCertificatePermission> keyToEnum = buildKeyToEnumMap();
     
     private static HashMap<String, SpxpCertificatePermission> buildKeyToEnumMap() {
-        HashMap<String, SpxpCertificatePermission> result = new HashMap<>(6);
+        HashMap<String, SpxpCertificatePermission> result = new HashMap<>(values().length);
         for(SpxpCertificatePermission value : values()) {
             result.put(value.getKey(), value);
         }
