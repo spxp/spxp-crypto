@@ -68,7 +68,7 @@ public class SpxpConnectKeyPair {
 
     @Override
     public String toString() {
-        return "SpxpConnectKeyPair [keyId=" + keyId + ", secretKey=" + Arrays.toString(secretKey) + ", publicKey=" + Arrays.toString(publicKey) + "]";
+        return "SpxpConnectKeyPair [keyId=" + keyId + ", secretKey=*****, publicKey=" + Arrays.toString(publicKey) + "]";
     }
 
 }

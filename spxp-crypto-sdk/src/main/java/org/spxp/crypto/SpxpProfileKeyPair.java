@@ -68,7 +68,7 @@ public class SpxpProfileKeyPair {
 
     @Override
     public String toString() {
-        return "SpxpProfileKeyPair [keyId=" + keyId + ", secretKey=" + Arrays.toString(secretKey) + ", publicKey=" + Arrays.toString(publicKey) + "]";
+        return "SpxpProfileKeyPair [keyId=" + keyId + ", secretKey=*****, publicKey=" + Arrays.toString(publicKey) + "]";
     }
 
 }

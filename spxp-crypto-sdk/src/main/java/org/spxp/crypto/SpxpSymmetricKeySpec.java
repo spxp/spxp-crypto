@@ -54,7 +54,7 @@ public class SpxpSymmetricKeySpec {
 
     @Override
     public String toString() {
-        return "SpxpSymmetricKeySpec [keyId=" + keyId + ", symmetricKey=" + Arrays.toString(symmetricKey) + "]";
+        return "SpxpSymmetricKeySpec [keyId=" + keyId + ", symmetricKey=*****]";
     }
 
 }
