@@ -10,7 +10,7 @@ public class SpxpConnectPublicKey {
 
     public SpxpConnectPublicKey(String keyId, byte[] publicKey) {
         if(keyId == null || publicKey == null || publicKey.length != 32) {
-            throw new IllegalArgumentException("Invalid keys");
+            throw new IllegalArgumentException("Invalid key");
         }
         this.keyId = keyId;
         this.publicKey = publicKey;

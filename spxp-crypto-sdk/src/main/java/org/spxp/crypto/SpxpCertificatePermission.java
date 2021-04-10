@@ -33,7 +33,7 @@ public enum SpxpCertificatePermission {
     public static SpxpCertificatePermission fromKey(String key) {
         SpxpCertificatePermission result = keyToEnum.get(key);
         if(result == null) {
-            throw new IllegalArgumentException("Unknoen SpxpCertificatePermission key: "+key);
+            throw new IllegalArgumentException("Unknown SpxpCertificatePermission key: "+key);
         }
         return result;
     }
