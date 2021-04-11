@@ -2,6 +2,10 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <name>DEPRECATED - SPXP Crypto SDK v0.2</name>
+    <description>DEPRECATED - Reference implementation of the cryptography in the old deprecated version 0.2 of the Social Profile Exchange Protocol (SPXP)</description>
+    <url>https://github.com/spxp/spxp-crypto</url>
+
     <parent>
         <groupId>org.spxp</groupId>
         <artifactId>spxp-crypto</artifactId>
