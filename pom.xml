@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.spxp</groupId>
     <artifactId>spxp-crypto</artifactId>
-    <version>0.3</version>
+    <version>0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>SPXP Crypto</name>
@@ -29,7 +29,7 @@
         <connection>scm:git:git://github.com/spxp/spxp-crypto.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/spxp/spxp-crypto.git</developerConnection>
         <url>https://github.com/spxp/spxp-crypto</url>
-      <tag>v0.3</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <distributionManagement>
