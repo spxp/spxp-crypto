@@ -27,7 +27,7 @@
 
     <scm>
         <connection>scm:git:git://github.com/spxp/spxp-crypto.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:spxp/spxp-crypto.git</developerConnection>
+        <developerConnection>scm:git:ssh://git@github.com/spxp/spxp-crypto.git</developerConnection>
         <url>https://github.com/spxp/spxp-crypto</url>
     </scm>
 
