@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.spxp</groupId>
         <artifactId>spxp-crypto</artifactId>
-        <version>0.3-SNAPSHOT</version>
+        <version>0.3</version>
     </parent>
 
     <artifactId>spxp-crypto-sdk</artifactId>
