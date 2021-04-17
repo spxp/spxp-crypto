@@ -7,9 +7,12 @@ This tool is built as part of the parent multi-module maven build. It can also
 be built individually with the usual maven commands.
 
 ## Using
-We provide a `SpxpCryptoTool` batch file and shell script. These point to the
-jar file in the target directory. To use it outside of this build, you need to
-adopt these files slightly.
+Our [latest releases](https://github.com/spxp/spxp-crypto/releases) include
+native binaries for the Linux, MacOS and Windows platforms built with
+[GraalVM](https://www.graalvm.org/).  
+If you prefer plain Java, we also provide a `SpxpCryptoTool` batch file and
+shell script. These point to the jar file in the target directory. To use it
+outside of this build, you need to adopt these files slightly.
 
 ## Example usage
 This tool can be used to
