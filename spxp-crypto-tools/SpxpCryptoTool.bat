@@ -1,1 +1,1 @@
-@java -jar ./target/spxp-crypto-tools-0.3-SNAPSHOT.jar %*
+@java -jar ./target/spxp-crypto-tools-0.4-SNAPSHOT.jar %*
