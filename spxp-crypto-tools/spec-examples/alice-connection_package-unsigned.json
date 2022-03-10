@@ -7,18 +7,5 @@
         "kty" : "oct",
         "alg" : "A256GCM",
         "k" : "Dl3fyz_0lHaSeFl-TJxSTr2NET5H6t2SELmI5tiCFno"
-    },
-    "publishingCertificate" : {
-        "publicKey" : {
-            "kid" : "czlHMPEJcLb7jMUI",
-            "kty" : "OKP",
-            "crv" : "Ed25519",
-            "x" : "vg42ogNHigJnwZ0pwwMzUtaXZA49eqcfGYl2u9GR8vg"
-        },
-        "grant" : [ "post" ],
-        "signature" : {
-            "key" : "C8xSIBPKRTcXxFix",
-            "sig" : "PEekh7oCLQa0O4rCUPrH19yCJCLtEZfnumUlPrH0TPbq66Bj_aO71enf-P6gUttlgJFRRfvD1D7wAAYZaX6PCQ"
-        }
     }
 }

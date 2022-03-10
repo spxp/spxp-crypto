@@ -23,8 +23,7 @@
         }
     },
     "offering" : [
-        "read",
-        "publish"
+        "read"
     ],
     "establishKey" : {
         "kid": "T7n_19BqWjU17l1s",
@@ -33,7 +32,7 @@
         "k": "AnkrwD_Et1E0-FB0XYU38hpmdEGr0LOBO8O2HRdzgOw"
     },
     "signature": {
-        "sig": "vzKvMxXl0JGIDFEqiPv2rMokMCW-f3DR1nTi-pFebddvBIDGChSsUttsiPP5wFLzTvyNW6NEcDSCfbNKz5qeDw",
+        "sig": "hLNJLtg76uoynSDcW419Kt01tF3dylYBnhRvu3gUxLiyI7kcdQiwmv6Fmg-X0u0JGK2AHuzO14HIF3QQqz5xDA",
         "key": "C8xSIBPKRTcXxFix"
     }
 }

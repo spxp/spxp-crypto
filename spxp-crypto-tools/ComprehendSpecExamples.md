@@ -242,3 +242,33 @@ $ SpxpCryptoTool encryptsymjson ./spec-examples/alice-connection_package-signed.
 ```
 (This will create a different ciphertext and tag as a new random IV is chosen
 for each encryption)
+
+## Signed Connection Package of “Crypto Alice” for “Crypto Bob” in Chapter 15.1
+You can sign the connection package created by “Crypto Alice” for “Crypto Bob” yourself as follows:
+```
+$ SpxpCryptoTool sign ./spec-examples/alice-connection_package_with_publishing-unsigned.json ./spec-examples/alice-profile-keypair.json
+```
+And to verify the signature:
+```
+$ SpxpCryptoTool verify ./spec-examples/alice-connection_package_with_publishing-signed.json ./spec-examples/alice-profile-keypair.json
+```
+
+## Post with aad in Chapter 15.2
+You can sign the post with the publish token as AAD created by “Crypto Bob” yourself as follows:
+```
+$ SpxpCryptoTool sign -aad a0b1c2d3e4f5g6h7i8j9 ./spec-examples/bob-peerpost-post-unsigned.json ./spec-examples/bob-profile-keypair.json
+```
+And to verify the signature:
+```
+$ SpxpCryptoTool verify ./spec-examples/bob-peerpost-post-signed.json ./spec-examples/bob-profile-keypair.json
+```
+
+## Post preparation in Chapter 15.3
+You can sign the post preparation request created by “Crypto Bob” yourself as follows:
+```
+$ SpxpCryptoTool sign ./spec-examples/bob-peerpost-prepare-unsigned.json ./spec-examples/alice-bob-publish_keypair.json
+```
+And to verify the signature:
+```
+$ SpxpCryptoTool verify ./spec-examples/bob-peerpost-prepare-signed.json ./spec-examples/alice-bob-publish_keypair.json
+```

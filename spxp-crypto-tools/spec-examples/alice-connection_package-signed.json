@@ -8,21 +8,8 @@
         "alg" : "A256GCM",
         "k" : "Dl3fyz_0lHaSeFl-TJxSTr2NET5H6t2SELmI5tiCFno"
     },
-    "publishingCertificate" : {
-        "publicKey" : {
-            "kid" : "czlHMPEJcLb7jMUI",
-            "kty" : "OKP",
-            "crv" : "Ed25519",
-            "x" : "vg42ogNHigJnwZ0pwwMzUtaXZA49eqcfGYl2u9GR8vg"
-        },
-        "grant" : [ "post" ],
-        "signature" : {
-            "key" : "C8xSIBPKRTcXxFix",
-            "sig" : "PEekh7oCLQa0O4rCUPrH19yCJCLtEZfnumUlPrH0TPbq66Bj_aO71enf-P6gUttlgJFRRfvD1D7wAAYZaX6PCQ"
-        }
-    },
     "signature": {
-        "sig": "KwkZSI9hZQOxZbzlXviDvSL6ez2qJfimPLiP4vvFIOqgTqArimMagLuqYK8NM5F7BLRG5C_zp1VoExrU6Ps0DQ",
-        "key": "C8xSIBPKRTcXxFix"
+        "key": "C8xSIBPKRTcXxFix",
+        "sig": "MYD_wt5ARYtLCpjDbCxFMmjhO5V4VOEbgs10snKifa13cwZgsNBwuCjI4b2AvGznAQKft2EoiQf-TD3kNOm8Ag"
     }
 }
